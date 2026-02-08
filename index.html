@@ -18,7 +18,7 @@
     }
 
     button {
-      padding: 12px 20px;
+      padding: 12px 22px;
       font-size: 16px;
       border: none;
       border-radius: 25px;
@@ -26,6 +26,9 @@
       color: white;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      margin-top: 20px;
+      position: relative;
+      z-index: 10;
     }
 
     button:hover {
@@ -35,32 +38,30 @@
     /* 🎈 BALLOONS */
     .balloon {
       position: absolute;
-      bottom: -100px;
+      bottom: -120px;
       font-size: 50px;
       animation: floatUp linear infinite;
+      z-index: 1;
     }
 
     @keyframes floatUp {
-      from {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-120vh);
-        opacity: 0;
-      }
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-130vh); opacity: 0; }
     }
 
-    /* Different speeds */
-    .slow { animation-duration: 14s; }
-    .medium { animation-duration: 10s; }
-    .fast { animation-duration: 7s; }
+    .slow { animation-duration: 15s; }
+    .medium { animation-duration: 11s; }
+    .fast { animation-duration: 8s; }
+
+    #cake {
+      margin-top: 40px;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- 🎈 BALLOONS FOREVER -->
+  <!-- 🎈 BALLOONS -->
   <div class="balloon slow" style="left:5%;">🎈</div>
   <div class="balloon medium" style="left:15%;">🎈</div>
   <div class="balloon fast" style="left:25%;">🎈</div>
@@ -88,7 +89,7 @@
       <span onclick="pickCard()" style="cursor:pointer;">🃏</span>
     </div>
 
-    <p id="cardMessage" style="font-size:22px; margin-top:20px;"></p>
+    <p id="cardMessage" style="font-size:22px;"></p>
 
     <button id="toCakeBtn" type="button" onclick="goToCake()" style="display:none;">
       Go to Cake 🎂
@@ -103,7 +104,7 @@
     🎂
   </div>
 
-  <p id="cutText" style="display:none; font-size:20px;">
+  <p id="cutText" style="display:none; font-size:20px; margin-top:20px;">
     Drag to cut the cake ✂️
   </p>
 
@@ -112,7 +113,7 @@
     id="finalBtn" 
     type="button"
     onclick="showFinal()" 
-    style="display:none; margin-top:20px;"
+    style="display:none;"
   >
     Open Final Message 💖
   </button>
@@ -120,7 +121,7 @@
   <!-- 💖 FINAL MESSAGE -->
   <div 
     id="finalMessage" 
-    style="display:none; margin-top:30px; font-size:22px;"
+    style="display:none; margin-top:30px; font-size:22px; z-index:10; position:relative;"
   >
     💌 <br><br>
     Happy Birthday 🎉🎂 <br><br>
@@ -130,7 +131,7 @@
   </div>
 
   <!-- 🎵 MUSIC -->
-  <audio id="music">
+  <audio id="music" preload="auto">
     <source src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.wav">
   </audio>
 
@@ -203,7 +204,10 @@
       document.getElementById("cutText").innerText = "🎉 Cake Cut!";
       document.getElementById("finalBtn").style.display = "inline-block";
 
-      document.getElementById("music").play();
+      const music = document.getElementById("music");
+      music.currentTime = 0;
+      music.play().catch(() => {});
+      
       if (navigator.vibrate) navigator.vibrate(400);
     }
 
@@ -215,6 +219,7 @@
 
 </body>
 </html>
+
 
 
    
