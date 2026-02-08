@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Birthday Test</title>
+  <title>Birthday Countdown</title>
 </head>
-<body>
-  <h1>🎉 It works!</h1>
-  <button>Start</button>
+
+<body style="text-align:center; font-family:Arial; background:#ffe6f2;">
+
+  <h1 id="title">🎉 Ready?</h1>
+
+  <button id="startBtn" onclick="start()">Start</button>
+
+  <h2 id="countdown"></h2>
+
+  <script>
+    function start() {
+      document.getElementById("startBtn").style.display = "none";
+      let count = 3;
+      document.getElementById("countdown").innerText = count;
+
+      let timer = setInterval(() => {
+        count--;
+        document.getElementById("countdown").innerText = count;
+
+        if (count === 0) {
+          clearInterval(timer);
+          document.getElementById("title").innerText = "🎂 Cake time!";
+          document.getElementById("countdown").innerText = "";
+        }
+      }, 1000);
+    }
+  </script>
+
 </body>
 </html>
+
