@@ -13,15 +13,26 @@
   <h2 id="countdown"></h2>
 
   <!-- Cake -->
-  <div id="cake" style="display:none; font-size:120px; transform: scale(2.5);">
-  🎂
-</div>
+  <div 
+    id="cake" 
+    style="display:none; font-size:120px; transform: scale(3); cursor:pointer;"
+  >
+    🎂
+  </div>
 
-  <p id="cutText" style="display:none; font-size:60px;">
+  <p id="cutText" style="display:none; font-size:20px;">
     Swipe to cut the cake!
   </p>
 
+  <!-- Music -->
+  <audio id="music">
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.wav">
+  </audio>
+
   <script>
+    let startX = 0;
+    let cut = false;
+
     function start() {
       document.getElementById("startBtn").style.display = "none";
 
@@ -34,14 +45,56 @@
 
         if (count === 0) {
           clearInterval(timer);
-
           document.getElementById("countdown").innerText = "";
-          document.getElementById("title").innerText = "🎂 Here’s the cake!";
-
+          document.getElementById("title").innerText = "🎂 Cut the cake!";
           document.getElementById("cake").style.display = "block";
           document.getElementById("cutText").style.display = "block";
         }
       }, 1000);
+    }
+
+    const cake = document.getElementById("cake");
+
+    // Touch (phone)
+    cake.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    cake.addEventListener("touchend", e => {
+      let endX = e.changedTouches[0].clientX;
+      if (Math.abs(endX - startX) > 50) {
+        cutCake();
+      }
+    });
+
+    // Mouse (laptop)
+    cake.addEventListener("mousedown", e => {
+      startX = e.clientX;
+    });
+
+    cake.addEventListener("mouseup", e => {
+      if (Math.abs(e.clientX - startX) > 50) {
+        cutCake();
+      }
+    });
+
+    function cutCake() {
+      if (cut) return; // stop multiple cuts
+      cut = true;
+
+      // Change cake
+      cake.innerText = "🍰";
+
+      // Change text
+      document.getElementById("cutText").innerText = "🎉 Cake Cut! Happy Birthday!";
+
+      // Play music
+      document.getElementById("music").play();
+
+      // Vibrate phone
+      if (navigator.vibrate) {
+        navigator.vibrate(400);
+      }
     }
   </script>
 
