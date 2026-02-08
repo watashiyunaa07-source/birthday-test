@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Birthday Cake</title>
+  <title>Birthday Surprise</title>
 </head>
 
 <body style="text-align:center; font-family:Arial; background:#ffe6f2;">
 
-  <h1 id="title">🎉 Ready?</h1>
+  <h1 id="title">🎉 Ready for the surprise?</h1>
 
   <button id="startBtn" onclick="start()">Start</button>
 
   <h2 id="countdown"></h2>
-<img 
-  id="cake"
-  src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Birthday_cake.jpg/320px-Birthday_cake.jpg"
-  style="display:none; width:250px; margin-top:20px;"
->
+
+  <!-- Cake -->
+  <h1 id="cake" style="display:none; font-size:100px;">🎂</h1>
+  <p id="cutText" style="display:none; font-size:20px;">
+    Swipe to cut the cake!
+  </p>
 
   <script>
     function start() {
       document.getElementById("startBtn").style.display = "none";
+
       let count = 3;
       document.getElementById("countdown").innerText = count;
 
@@ -29,9 +31,12 @@
 
         if (count === 0) {
           clearInterval(timer);
+
           document.getElementById("countdown").innerText = "";
           document.getElementById("title").innerText = "🎂 Here’s the cake!";
+
           document.getElementById("cake").style.display = "block";
+          document.getElementById("cutText").style.display = "block";
         }
       }, 1000);
     }
