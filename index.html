@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Birthday Countdown</title>
+  <title>Birthday Cake</title>
 </head>
 
 <body style="text-align:center; font-family:Arial; background:#ffe6f2;">
@@ -11,6 +11,12 @@
   <button id="startBtn" onclick="start()">Start</button>
 
   <h2 id="countdown"></h2>
+
+  <img 
+    id="cake"
+    src="https://i.imgur.com/6YV5Q0n.png"
+    style="display:none; width:250px; margin-top:20px;"
+  >
 
   <script>
     function start() {
@@ -24,8 +30,9 @@
 
         if (count === 0) {
           clearInterval(timer);
-          document.getElementById("title").innerText = "🎂 Cake time!";
           document.getElementById("countdown").innerText = "";
+          document.getElementById("title").innerText = "🎂 Here’s the cake!";
+          document.getElementById("cake").style.display = "block";
         }
       }, 1000);
     }
@@ -33,4 +40,3 @@
 
 </body>
 </html>
-
