@@ -4,7 +4,7 @@
   <title>Birthday Surprise</title>
 </head>
 
-<body style="text-align:center; font-family:Arial; background:#ffe6f2;">
+<body style="text-align:center; font-family:Arial; background:#ffe6f2; padding:20px;">
 
   <h1 id="title">🎉 Ready for the surprise?</h1>
 
@@ -12,7 +12,24 @@
 
   <h2 id="countdown"></h2>
 
-  <!-- Cake -->
+  <!-- CARDS -->
+  <div id="cards" style="display:none;">
+    <h2>🎴 Pick one card 🎴</h2>
+
+    <div style="font-size:70px;">
+      <span onclick="pickCard()" style="cursor:pointer;">🃏</span>
+      <span onclick="pickCard()" style="cursor:pointer;">🃏</span>
+      <span onclick="pickCard()" style="cursor:pointer;">🃏</span>
+    </div>
+
+    <p id="cardMessage" style="font-size:22px; margin-top:20px;"></p>
+
+    <button id="toCakeBtn" onclick="goToCake()" style="display:none;">
+      Go to Cake 🎂
+    </button>
+  </div>
+
+  <!-- CAKE -->
   <div 
     id="cake" 
     style="display:none; font-size:120px; transform: scale(3); cursor:pointer;"
@@ -21,10 +38,31 @@
   </div>
 
   <p id="cutText" style="display:none; font-size:20px;">
-    Swipe to cut the cake!
+    Drag to cut the cake!
   </p>
 
-  <!-- Music -->
+  <!-- FINAL MESSAGE BUTTON -->
+  <button 
+    id="finalBtn" 
+    onclick="showFinal()" 
+    style="display:none; margin-top:20px;"
+  >
+    Open Final Message 💖
+  </button>
+
+  <!-- FINAL MESSAGE -->
+  <div 
+    id="finalMessage" 
+    style="display:none; margin-top:30px; font-size:22px;"
+  >
+    💌 <br><br>
+    Happy Birthday 🎉🎂 <br><br>
+    I’m really lucky to have you in my life.  
+    You’re important to me, and I hope this year gives you  
+    happiness, fun, and everything you deserve 💖
+  </div>
+
+  <!-- MUSIC -->
   <audio id="music">
     <source src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.wav">
   </audio>
@@ -32,6 +70,13 @@
   <script>
     let startX = 0;
     let cut = false;
+    let cardPicked = false;
+
+    const cardMessages = [
+      "💖 This card means you are very important to me.",
+      "🌟 This card means you make my days brighter.",
+      "🤍 This card means I trust you more than anyone."
+    ];
 
     function start() {
       document.getElementById("startBtn").style.display = "none";
@@ -46,57 +91,25 @@
         if (count === 0) {
           clearInterval(timer);
           document.getElementById("countdown").innerText = "";
-          document.getElementById("title").innerText = "🎂 Cut the cake!";
-          document.getElementById("cake").style.display = "block";
-          document.getElementById("cutText").style.display = "block";
+          document.getElementById("title").innerText = "🎴 Choose a card";
+          document.getElementById("cards").style.display = "block";
         }
       }, 1000);
     }
 
-    const cake = document.getElementById("cake");
+    function pickCard() {
+      if (cardPicked) return;
+      cardPicked = true;
 
-    // Touch (phone)
-    cake.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-    });
+      const msg =
+        cardMessages[Math.floor(Math.random() * cardMessages.length)];
 
-    cake.addEventListener("touchend", e => {
-      let endX = e.changedTouches[0].clientX;
-      if (Math.abs(endX - startX) > 50) {
-        cutCake();
-      }
-    });
-
-    // Mouse (laptop)
-    cake.addEventListener("mousedown", e => {
-      startX = e.clientX;
-    });
-
-    cake.addEventListener("mouseup", e => {
-      if (Math.abs(e.clientX - startX) > 50) {
-        cutCake();
-      }
-    });
-
-    function cutCake() {
-      if (cut) return; // stop multiple cuts
-      cut = true;
-
-      // Change cake
-      cake.innerText = "🍰";
-
-      // Change text
-      document.getElementById("cutText").innerText = "🎉 Cake Cut! Happy Birthday!";
-
-      // Play music
-      document.getElementById("music").play();
-
-      // Vibrate phone
-      if (navigator.vibrate) {
-        navigator.vibrate(400);
-      }
+      document.getElementById("cardMessage").innerText = msg;
+      document.getElementById("toCakeBtn").style.display = "inline-block";
     }
-  </script>
 
-</body>
-</html>
+    function goToCake() {
+      document.getElementById("cards").style.display = "none";
+      document.getElementById("title").innerText = "🎂 Cut
+
+   
