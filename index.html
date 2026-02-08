@@ -1,18 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Birthday Surprise</title>
+  <title>Birthday Surprise 🎉</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      font-family: "Comic Sans MS", Arial;
+      background: linear-gradient(#ffe6f2, #fff0f5);
+      overflow: hidden;
+    }
+
+    h1, h2, p {
+      color: #ff4d88;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: #ff66a3;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+      background: #ff3385;
+    }
+
+    /* 🎈 BALLOONS */
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      font-size: 50px;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-120vh);
+        opacity: 0;
+      }
+    }
+
+    /* Different speeds */
+    .slow { animation-duration: 14s; }
+    .medium { animation-duration: 10s; }
+    .fast { animation-duration: 7s; }
+  </style>
 </head>
 
-<body style="text-align:center; font-family:Arial; background:#ffe6f2; padding:20px;">
+<body>
+
+  <!-- 🎈 BALLOONS FOREVER -->
+  <div class="balloon slow" style="left:5%;">🎈</div>
+  <div class="balloon medium" style="left:15%;">🎈</div>
+  <div class="balloon fast" style="left:25%;">🎈</div>
+  <div class="balloon slow" style="left:35%;">🎈</div>
+  <div class="balloon medium" style="left:45%;">🎈</div>
+  <div class="balloon fast" style="left:55%;">🎈</div>
+  <div class="balloon slow" style="left:65%;">🎈</div>
+  <div class="balloon medium" style="left:75%;">🎈</div>
+  <div class="balloon fast" style="left:85%;">🎈</div>
+  <div class="balloon slow" style="left:95%;">🎈</div>
 
   <h1 id="title">🎉 Ready for the surprise?</h1>
 
-  <button id="startBtn" onclick="start()">Start</button>
+  <button id="startBtn" type="button" onclick="start()">Start 🎀</button>
 
   <h2 id="countdown"></h2>
 
-  <!-- CARDS -->
+  <!-- 🎴 CARDS -->
   <div id="cards" style="display:none;">
     <h2>🎴 Pick one card 🎴</h2>
 
@@ -24,12 +90,12 @@
 
     <p id="cardMessage" style="font-size:22px; margin-top:20px;"></p>
 
-    <button id="toCakeBtn" onclick="goToCake()" style="display:none;">
+    <button id="toCakeBtn" type="button" onclick="goToCake()" style="display:none;">
       Go to Cake 🎂
     </button>
   </div>
 
-  <!-- CAKE -->
+  <!-- 🎂 CAKE -->
   <div 
     id="cake" 
     style="display:none; font-size:120px; transform: scale(3); cursor:pointer;"
@@ -38,31 +104,32 @@
   </div>
 
   <p id="cutText" style="display:none; font-size:20px;">
-    Drag to cut the cake!
+    Drag to cut the cake ✂️
   </p>
 
-  <!-- FINAL MESSAGE BUTTON -->
+  <!-- 💌 FINAL BUTTON -->
   <button 
     id="finalBtn" 
+    type="button"
     onclick="showFinal()" 
     style="display:none; margin-top:20px;"
   >
     Open Final Message 💖
   </button>
 
-  <!-- FINAL MESSAGE -->
+  <!-- 💖 FINAL MESSAGE -->
   <div 
     id="finalMessage" 
     style="display:none; margin-top:30px; font-size:22px;"
   >
     💌 <br><br>
     Happy Birthday 🎉🎂 <br><br>
-    I’m really lucky to have you in my life.  
-    You’re important to me, and I hope this year gives you  
-    happiness, fun, and everything you deserve 💖
+    You are really special to me 💕  
+    Thank you for being such an amazing part of my life.  
+    I hope your day is as cute and awesome as you are 🌸✨
   </div>
 
-  <!-- MUSIC -->
+  <!-- 🎵 MUSIC -->
   <audio id="music">
     <source src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.wav">
   </audio>
@@ -110,6 +177,47 @@
 
     function goToCake() {
       document.getElementById("cards").style.display = "none";
-      document.getElementById("title").innerText = "🎂 Cut
+      document.getElementById("title").innerText = "🎂 Cut the cake!";
+      document.getElementById("cake").style.display = "block";
+      document.getElementById("cutText").style.display = "block";
+    }
+
+    const cake = document.getElementById("cake");
+
+    cake.addEventListener("mousedown", e => startX = e.clientX);
+    cake.addEventListener("mouseup", e => {
+      if (Math.abs(e.clientX - startX) > 50) cutCake();
+    });
+
+    cake.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+    cake.addEventListener("touchend", e => {
+      let endX = e.changedTouches[0].clientX;
+      if (Math.abs(endX - startX) > 50) cutCake();
+    });
+
+    function cutCake() {
+      if (cut) return;
+      cut = true;
+
+      cake.innerText = "🍰";
+      document.getElementById("cutText").innerText = "🎉 Cake Cut!";
+      document.getElementById("finalBtn").style.display = "inline-block";
+
+      document.getElementById("music").play();
+      if (navigator.vibrate) navigator.vibrate(400);
+    }
+
+    function showFinal() {
+      document.getElementById("finalBtn").style.display = "none";
+      document.getElementById("finalMessage").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
+
 
    
+
+  
+
