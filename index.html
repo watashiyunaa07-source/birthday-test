@@ -1,183 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
+<title>Birthday Surprise 🎂</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Surprise</title>
 
 <style>
-body {
-  margin: 0;
-  background: #ffd6e8;
+body{
+  margin:0;
   font-family: "Comic Sans MS", sans-serif;
-  text-align: center;
-  overflow: hidden;
+  background:#ffd6e8;
+  text-align:center;
+  overflow:hidden;
 }
 
-.screen {
-  display: none;
-  height: 100vh;
-  width: 100vw;
-  padding: 20px;
+.hidden{ display:none; }
+
+.screen{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
 }
 
-.active {
-  display: block;
+/* LOADING */
+#loadText{
+  font-size:22px;
+  font-weight:bold;
 }
 
-button {
-  background: #ff7eb9;
-  border: none;
-  padding: 14px 22px;
-  font-size: 18px;
-  border-radius: 25px;
-  margin-top: 20px;
-  cursor: pointer;
+/* BUTTON */
+button{
+  padding:12px 20px;
+  border:none;
+  border-radius:20px;
+  background:#ff5fa2;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 
-img {
-  max-width: 80%;
+/* CAKE */
+#cakeBox{
+  position:relative;
 }
 
-/* Cake */
-#cakeBox {
-  position: relative;
+#cake{
+  width:220px;
 }
 
-#cake {
-  width: 220px;
+#candle{
+  font-size:67px;
+  position:absolute;
+  top:-70px;
+  left:50%;
+  transform:translateX(-50%);
+  cursor:pointer;
 }
 
-/* Candle */
-#candle {
-  font-size: 60px;
-  position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
+#slice{
+  width:260px;
+  animation:pop 0.5s ease;
 }
 
-/* Swipe line */
-#cutLine {
-  position: absolute;
-  width: 6px;
-  height: 240px;
-  background: red;
-  left: 50%;
-  top: 0;
-  display: none;
-}
-
-/* Big cake emoji */
-.bigCake {
-  font-size: 120px;
-}
-
-/* Scroll */
-#scrollBox {
-  position: relative;
-}
-
-#scrollBox img {
-  width: 260px;
-}
-
-#scrollText {
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 200px;
-  font-size: 16px;
+@keyframes pop{
+  from{ transform:scale(0.6); opacity:0; }
+  to{ transform:scale(1); opacity:1; }
 }
 </style>
 </head>
 
 <body>
 
-<audio id="music" src="music.mp3" loop></audio>
-
-<!-- SCREEN 1 -->
-<div class="screen active" id="s1">
-  <img src="rabbit.png" width="120">
-  <h2>Loading your cuteness…</h2>
-  <h3 id="load">1%</h3>
-  <button id="nextBtn" style="display:none" onclick="go(2)">Start 🎁</button>
+<!-- LOADING SCREEN -->
+<div id="loading" class="screen">
+  <div id="loadText">Loading your cuteness 1%</div>
+  <button id="nextBtn" class="hidden">Start 🎁</button>
 </div>
 
-<!-- SCREEN 2 -->
-<div class="screen" id="s2">
-  <h2>Decorate the cake</h2>
-  <div id="cakeBox">
-    <img id="cake" src="cake.png">
-  </div>
-  <button onclick="decorate()">Decorate Cake</button>
-</div>
+<!-- CAKE SCREEN -->
+<div id="cakeScreen" class="screen hidden">
+  <h2>Make a wish 🎉</h2>
 
-<!-- SCREEN 3 -->
-<div class="screen" id="s3">
-  <h2>Light the candle</h2>
   <div id="cakeBox">
-    <img src="cake_decorated.png" width="220">
     <div id="candle">🕯️</div>
+    <img src="cake.png" id="cake">
   </div>
-  <button onclick="lightCandle()">Light Candle</button>
+
+  <button onclick="blowCandle()">Blow the candle</button>
+  <button onclick="cutCake()">Cut the cake</button>
 </div>
 
-<!-- SCREEN 4 -->
-<div class="screen" id="s4">
-  <h2>Blow the candle</h2>
-  <div id="cakeBox">
-    <img src="cake_decorated.png" width="220">
-    <div id="candle">🕯️</div>
-  </div>
-  <button onclick="blow()">Blow Candle</button>
-</div>
-
-<!-- SCREEN 5 -->
-<div class="screen" id="s5">
-  <h2>Swipe to cut the cake</h2>
-  <div id="cakeBox">
-    <img src="cake_decorated.png" id="cake">
-    <div id="cutLine"></div>
-  </div>
-</div>
-
-<!-- SCREEN 6 -->
-<div class="screen" id="s6">
-  <div class="bigCake">🎂</div>
-  <h2>HAPPY BIRTHDAY!</h2>
-  <button onclick="go(7)">Final Message</button>
-</div>
-
-<!-- SCREEN 7 -->
-<div class="screen" id="s7">
-  <div id="scrollBox">
-    <img src="scroll.png">
-    <div id="scrollText">
-      You are so important, loved, and special 💖  
-      Never forget how amazing you are.
-    </div>
-  </div>
+<!-- SLICE SCREEN -->
+<div id="sliceScreen" class="screen hidden">
+  <h2>YAYYYY 🍰</h2>
+  <div style="font-size:80px;">🍰</div>
+  <img src="cake_slice.png" id="slice">
 </div>
 
 <script>
+/* LOADING */
 let percent = 1;
-const loadText = document.getElementById("load");
+const loadText = document.getElementById("loadText");
 const nextBtn = document.getElementById("nextBtn");
 
-nextBtn.style.display = "none";
-
-const loader = setInterval(() => {
+const loader = setInterval(()=>{
   percent++;
   loadText.innerText = "Loading your cuteness " + percent + "%";
-
-  if (percent >= 222) {
+  if(percent >= 222){
     clearInterval(loader);
-    nextBtn.style.display = "inline-block";
+    nextBtn.classList.remove("hidden");
   }
-}, 50);
+},30);
+
+nextBtn.onclick = ()=>{
+  document.getElementById("loading").classList.add("hidden");
+  document.getElementById("cakeScreen").classList.remove("hidden");
+};
+
+/* VIBRATION SAFE FUNCTION */
+function vibrate(ms){
+  if(navigator.vibrate){
+    navigator.vibrate(ms);
+  }
+}
+
+/* CANDLE */
+function blowCandle(){
+  document.getElementById("candle").innerText = "💨";
+  vibrate(200);
+}
+
+/* CUT CAKE */
+function cutCake(){
+  vibrate([100,50,100]);
+  document.getElementById("cakeScreen").classList.add("hidden");
+  document.getElementById("sliceScreen").classList.remove("hidden");
+}
 </script>
 
+</body>
+</html>
 
+ 
