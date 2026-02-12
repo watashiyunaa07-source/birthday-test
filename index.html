@@ -1,288 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Birthday Surprise!!!!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise 🎂</title>
 
 <style>
-*{box-sizing:border-box;font-family:"Poppins",sans-serif}
 body{
   margin:0;
-  background:#ffd6e8;
-  overflow:hidden;
+  font-family:'Comic Sans MS',cursive;
+  background:linear-gradient(135deg,#ffd6ec,#ffe9f6);
   text-align:center;
+  overflow-x:hidden;
 }
-.screen{
-  display:none;
-  min-height:100vh;
-  padding:20px;
-}
-.show{display:block}
+
+.page{display:none;min-height:100vh;padding:30px;}
+.show{display:block;}
 
 button{
   padding:12px 22px;
   border:none;
-  border-radius:20px;
-  background:#ff69b4;
+  border-radius:25px;
+  background:#ff7eb9;
   color:white;
-  font-size:18px;
-  cursor:pointer;
+  font-size:16px;
   margin-top:20px;
+  cursor:pointer;
 }
+  /* loading */
+#bar{width:80%;height:25px;background:white;border-radius:20px;margin:40px auto;overflow:hidden;}
+#progress{height:100%;width:0;background:#ff7eb9;}
 
-.progressBox{
-  width:280px;
-  height:16px;
-  background:#fff;
-  border-radius:10px;
-  margin:20px auto;
-  overflow:hidden;
-}
-#bar{
-  height:100%;
-  width:0%;
-  background:#ff69b4;
-  transition:width 0.1s linear;
-}
+/* cards */
+.cards{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
 
-.cards{
-  display:flex;
-  gap:20px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
 .card{
-  width:140px;
-  height:180px;
+  width:110px;height:150px;
   perspective:1000px;
   cursor:pointer;
 }
-.cardInner{
-  width:100%;
-  height:100%;
+
+.inner{
   position:relative;
-  transition:transform 0.6s;
+  width:100%;height:100%;
+  transition:0.7s;
   transform-style:preserve-3d;
 }
-.card.flipped .cardInner{
-  transform:rotateY(180deg);
-}
-.cardFace{
+
+.card.flip .inner{transform:rotateY(180deg);}
+
+.front,.back{
   position:absolute;
-  width:100%;
-  height:100%;
-  border-radius:16px;
+  width:100%;height:100%;
+  backface-visibility:hidden;
+  border-radius:15px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
-  backface-visibility:hidden;
+  background:white;
+  font-size:26px;
 }
-.front{background:#fff}
+
 .back{
-  background:#ffb6d5;
   transform:rotateY(180deg);
+  font-size:13px;
   padding:10px;
-  font-size:16px;
 }
 
-#cakeImg{
-  width:260px;
-  display:block;
-  margin:20px auto;
+/* cake */
+.cake-img{
+  width:200px;
 }
 
-#candle{
-  font-size:60px;
-}
-
-.balloonRow{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  margin-top:20px;
-}
+/* balloons */
 .balloon{
-  width:60px;
-  height:80px;
-  background:#ff69b4;
-  border-radius:50% 50% 50% 50%;
+  width:80px;
+  margin:10px;
   cursor:pointer;
 }
 
+/* scroll */
 .scroll{
-  width:80%;
-  max-width:400px;
-  background:#fff;
-  margin:20px auto;
-  padding:20px;
-  border-radius:20px;
+  width:280px;
 }
 </style>
 </head>
 
 <body>
+  <!-- 🎵 MUSIC -->
+<audio id="music" loop>
+  <source src="birthday.mp3" type="audio/mp3">
+</audio>
 
-<!-- LOADING -->
-<div id="loading" class="screen show">
-  <h2>Loading your cuteness</h2>
-  <div class="progressBox"><div id="bar"></div></div>
-  <p id="loadText">1%</p>
-  <button id="startBtn" style="display:none" onclick="goIntro()">Start</button>
+<!-- PAGE 1 -->
+<div id="p1" class="page show">
+  <h2>Measuring your cuteness... 💗</h2>
+  <div id="bar"><div id="progress"></div></div>
 </div>
 
-<!-- INTRO -->
-<div id="intro" class="screen">
-  <img src="rabbit.png" width="120">
-  <h2>20 years ago a dollkeeper was born</h2>
-  <button onclick="goCards()">Next</button>
+<!-- PAGE 2 -->
+<div id="p2" class="page">
+  <img src="rabbit.png" width="220">
+  <h2>✨ A dollkeeper was born 20 years ago ✨</h2>
+  <button onclick="next(3)">Next ➜</button>
 </div>
-
-<!-- CARDS -->
-<div id="cards" class="screen">
-  <h2>Pick one card</h2>
+  <!-- PAGE 3 -->
+<div id="p3" class="page">
+  <h2>Pick a card ♠️♦️♣️❤️</h2>
   <div class="cards">
-    <div class="card" onclick="flipCard(this,'You are special')">
-      <div class="cardInner">
-        <div class="cardFace front">♠</div>
-        <div class="cardFace back">You are special</div>
+
+    <div class="card" onclick="flip(this)">
+      <div class="inner">
+        <div class="front">♠️</div>
+        <div class="back">You are my strongest support</div>
       </div>
     </div>
-    <div class="card" onclick="flipCard(this,'You are loved')">
-      <div class="cardInner">
-        <div class="cardFace front">♥</div>
-        <div class="cardFace back">You are loved</div>
+
+    <div class="card" onclick="flip(this)">
+      <div class="inner">
+        <div class="front">♦️</div>
+        <div class="back">You shine brighter than diamonds</div>
       </div>
     </div>
-    <div class="card" onclick="flipCard(this,'You are rare')">
-      <div class="cardInner">
-        <div class="cardFace front">♦</div>
-        <div class="cardFace back">You are rare</div>
+
+    <div class="card" onclick="flip(this)">
+      <div class="inner">
+        <div class="front">♣️</div>
+        <div class="back">You bring luck into my life</div>
       </div>
     </div>
-    <div class="card" onclick="flipCard(this,'You are magic')">
-      <div class="cardInner">
-        <div class="cardFace front">♣</div>
-        <div class="cardFace back">You are magic</div>
+
+    <div class="card" onclick="flip(this)">
+      <div class="inner">
+        <div class="front">❤️</div>
+        <div class="back">You have the most beautiful heart</div>
       </div>
     </div>
+
   </div>
-  <button id="toCake" style="display:none" onclick="goCake()">Go to cake</button>
+
+  <button id="cakeBtn" style="display:none" onclick="next(4)">Go to Cake 🎂</button>
+</div>
+  <!-- PAGE 4 -->
+<div id="p4" class="page">
+  <img src="cake_plain.png" class="cake-img">
+  <br>
+  <button onclick="blow()">Blow candle 🕯</button>
+  <button onclick="cutCake()">Cut the cake 🍰</button>
+  <div id="confetti"></div>
 </div>
 
-<!-- CAKE -->
-<div id="cake" class="screen">
-  <img id="cakeImg" src="cake_plain.png">
-  <button id="decorateBtn" onclick="decorateCake()">Decorate cake</button>
-  <div id="candleArea" style="display:none">
-    <div id="candle">🕯️🕯️🕯️</div>
-    <button onclick="blowCandle()">Blow candle</button>
-  </div>
+<!-- PAGE 5 -->
+<div id="p5" class="page">
+  <h2>🍰 A cute pink slice just for you 💕</h2>
+  <button onclick="next(6)">Next ➜</button>
 </div>
-
-<!-- CUT -->
-<div id="cut" class="screen">
-  <h2>Swipe to cut the cake</h2>
-  <div id="cutArea" style="height:200px"></div>
+  <!-- PAGE 6 -->
+<div id="p6" class="page">
+  <h2>Pop balloons 🎈</h2>
+  <div id="balloons"></div>
+  <h3 id="msg"></h3>
+  <button id="finalBtn" style="display:none" onclick="next(7)">Reveal Final Message 💌</button>
 </div>
-
-<!-- SLICE -->
-<div id="slice" class="screen">
-  <div style="font-size:120px">🎂</div>
-  <button onclick="goBalloons()">Next</button>
-</div>
-
-<!-- BALLOONS -->
-<div id="balloons" class="screen">
-  <h2 id="balloonText"></h2>
-  <div class="balloonRow">
-    <div class="balloon" onclick="popBalloon()"></div>
-    <div class="balloon" onclick="popBalloon()"></div>
-    <div class="balloon" onclick="popBalloon()"></div>
-    <div class="balloon" onclick="popBalloon()"></div>
-  </div>
-</div>
-
-<!-- FINAL -->
-<div id="final" class="screen">
-  <button onclick="showMessage()">Show final message</button>
-  <div id="message" style="display:none">
-    <div class="scroll">
-      <p>PASTE YOUR FINAL MESSAGE HERE</p>
-    </div>
-  </div>
+  <!-- PAGE 7 -->
+<div id="p7" class="page">
+  <img src="scroll.png" class="scroll">
+  <p>
+    Happy Birthday my favorite person 💖<br>
+    Thank you for being my happiness and comfort.<br>
+    You are truly special to me.<br>
+    Stay cute forever ✨
+  </p>
 </div>
 
 <script>
-let load=0;
-const bar=document.getElementById("bar");
-const text=document.getElementById("loadText");
-const startBtn=document.getElementById("startBtn");
+let current=1;
 
-const loader=setInterval(()=>{
-  load++;
-  bar.style.width=(load/222)*100+"%";
-  text.innerText=load+"%";
-  if(load>=222){
-    clearInterval(loader);
-    startBtn.style.display="inline-block";
+function next(n){
+  document.getElementById("p"+current).classList.remove("show");
+  document.getElementById("p"+n).classList.add("show");
+  current=n;
+  document.getElementById("music").play();
+}
+  /* loading */
+let w=0;
+let load=setInterval(()=>{
+  w+=2;
+  progress.style.width=w+"%";
+  if(w>=100){clearInterval(load);next(2);}
+},60);
+
+/* cards */
+let flipped=0;
+function flip(card){
+  if(card.classList.contains("flip")) return;
+  card.classList.add("flip");
+  flipped++;
+  if(flipped===4) cakeBtn.style.display="inline-block";
+}
+
+/* confetti */
+function blow(){
+  for(let i=0;i<40;i++){
+    let s=document.createElement("span");
+    s.innerHTML="🎊";
+    s.style.position="absolute";
+    s.style.left=Math.random()*100+"%";
+    s.style.top=Math.random()*100+"%";
+    confetti.appendChild(s);
   }
-},15);
-
-function show(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("show"));
-  document.getElementById(id).classList.add("show");
+}
+  /* cake cut */
+function cutCake(){
+  if(navigator.vibrate) navigator.vibrate(300);
+  next(5);
 }
 
-function goIntro(){show("intro")}
-function goCards(){show("cards")}
-
-let chosen=false;
-function flipCard(card){
-  if(chosen)return;
-  chosen=true;
-  card.classList.add("flipped");
-  document.getElementById("toCake").style.display="inline-block";
-}
-
-function goCake(){show("cake")}
-
-function decorateCake(){
-  document.getElementById("cakeImg").src="cake_decorated.png";
-  document.getElementById("decorateBtn").style.display="none";
-  document.getElementById("candleArea").style.display="block";
-}
-
-function blowCandle(){
-  navigator.vibrate?.(200);
-  show("cut");
-}
-
-document.getElementById("cutArea").addEventListener("pointerup",()=>{
-  show("slice");
-});
-
-let words=["YOU","ARE","AMAZING"];
+/* balloons */
+const words="YOU ARE AMAZING!";
 let i=0;
-function goBalloons(){
-  show("balloons");
-}
-function popBalloon(){
-  if(i<words.length){
-    document.getElementById("balloonText").innerText+=words[i]+" ";
-    i++;
-  }
-  if(i===words.length){
-    setTimeout(()=>show("final"),800);
-  }
-}
 
-function showMessage(){
-  document.getElementById("message").style.display="block";
+for(let j=0;j<words.length;j++){
+  let img=document.createElement("img");
+  img.src="ballon.png";
+  img.className="balloon";
+  img.onclick=()=>{
+    img.style.visibility="hidden";
+    msg.innerHTML+=words[i++];
+    if(i===words.length)
+      finalBtn.style.display="inline-block";
+  }
+  balloons.appendChild(img);
 }
 </script>
 
 </body>
 </html>
-
