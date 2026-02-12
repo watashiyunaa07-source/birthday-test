@@ -1,166 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Birthday Surprise!</title>
+<title>Birthday</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
   margin:0;
-  font-family:"Comic Sans MS", sans-serif;
   background:#ffd6e8;
+  font-family:Arial, sans-serif;
   text-align:center;
 }
 
-.hidden{ display:none; }
-
 .screen{
-  min-height:100vh;
+  height:100vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:16px;
 }
 
-/* Loading */
-#loadText{
-  font-size:24px;
-  font-weight:bold;
+.hidden{
+  display:none;
 }
 
-#barBox{
-  width:240px;
-  height:14px;
-  background:#ffe6f1;
-  border-radius:20px;
-  overflow:hidden;
-}
-
-#bar{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#ff69b4,#ffb6d9);
-}
-
-/* Button */
 button{
   padding:12px 24px;
   border:none;
   border-radius:20px;
   background:#ff5fa2;
   color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-/* Cake */
-#cakeBox{
-  position:relative;
-}
-
-#cake{
-  width:240px;
-}
-
-#candle{
-  font-size:60px;
-  position:absolute;
-  top:-70px;
-  left:50%;
-  transform:translateX(-50%);
+  font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOADING SCREEN -->
-<div id="loading" class="screen">
-  <div id="loadText">Loading your cuteness 1%</div>
-
-  <div id="barBox">
-    <div id="bar"></div>
-  </div>
-
-  <button id="startBtn" class="hidden">Start 🎁</button>
+<!-- SCREEN 1 -->
+<div id="screen1" class="screen">
+  <h2 id="text">Loading your cuteness 1%</h2>
+  <button id="start" class="hidden" onclick="goNext()">Start 🎁</button>
 </div>
 
-<!-- CAKE SCREEN -->
-<div id="cakeScreen" class="screen hidden">
-  <h2>A dollkeeper was born today 💗</h2>
-
-  <div id="cakeBox">
-    <div id="candle" class="hidden">🕯️</div>
-    <img src="cake_plain.png" id="cake">
-  </div>
-
-  <button id="decorateBtn">Decorate the cake</button>
-  <button id="lightBtn" class="hidden">Light the candle</button>
-  <button id="blowBtn" class="hidden">Blow the candle</button>
+<!-- SCREEN 2 -->
+<div id="screen2" class="screen hidden">
+  <h2>IT WORKED 🎉</h2>
+  <img src="cake_plain.png" width="200">
 </div>
 
 <script>
-/* ELEMENTS */
-const loadText = document.getElementById("loadText");
-const bar = document.getElementById("bar");
-const startBtn = document.getElementById("startBtn");
+let p = 1;
+const text = document.getElementById("text");
+const btn = document.getElementById("start");
 
-const loading = document.getElementById("loading");
-const cakeScreen = document.getElementById("cakeScreen");
-
-const cakeImg = document.getElementById("cake");
-const decorateBtn = document.getElementById("decorateBtn");
-const lightBtn = document.getElementById("lightBtn");
-const blowBtn = document.getElementById("blowBtn");
-const candle = document.getElementById("candle");
-
-/* LOADING */
-let percent = 1;
-const loader = setInterval(()=>{
-  percent++;
-  loadText.innerText = "Loading your cuteness " + percent + "%";
-  bar.style.width = (percent/222)*100 + "%";
-
-  if(percent >= 222){
-    clearInterval(loader);
-    startBtn.classList.remove("hidden");
+const timer = setInterval(()=>{
+  p++;
+  text.innerText = "Loading your cuteness " + p + "%";
+  if(p >= 50){
+    clearInterval(timer);
+    btn.classList.remove("hidden");
   }
-},30);
+}, 50);
 
-/* START */
-startBtn.onclick = ()=>{
-  loading.classList.add("hidden");
-  cakeScreen.classList.remove("hidden");
-};
-
-/* VIBRATION */
-function vibrate(ms){
-  if(navigator.vibrate) navigator.vibrate(ms);
+function goNext(){
+  document.getElementById("screen1").classList.add("hidden");
+  document.getElementById("screen2").classList.remove("hidden");
 }
-
-/* DECORATE CAKE */
-decorateBtn.onclick = ()=>{
-  cakeImg.src = "cake_decorated.png";
-  decorateBtn.classList.add("hidden");
-  lightBtn.classList.remove("hidden");
-  vibrate(100);
-};
-
-/* LIGHT CANDLE */
-lightBtn.onclick = ()=>{
-  candle.classList.remove("hidden");
-  lightBtn.classList.add("hidden");
-  blowBtn.classList.remove("hidden");
-  vibrate(150);
-};
-
-/* BLOW CANDLE */
-blowBtn.onclick = ()=>{
-  candle.innerText = "💨";
-  vibrate(300);
-};
 </script>
 
 </body>
