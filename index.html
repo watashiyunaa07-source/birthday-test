@@ -2,12 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Birthday Surprise 🎂</title>
+<title>Birthday Surprise</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  #barBox{
-  width:220px;
+body{
+  margin:0;
+  font-family:"Comic Sans MS", sans-serif;
+  background:#ffd6e8;
+  text-align:center;
+}
+
+.hidden{ display:none; }
+
+.screen{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+}
+
+/* Loading */
+#loadText{
+  font-size:22px;
+  font-weight:bold;
+}
+
+#barBox{
+  width:240px;
   height:14px;
   background:#ffe6f1;
   border-radius:20px;
@@ -18,38 +42,11 @@
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#ff69b4,#ffb6d9);
-  border-radius:20px;
-  transition:width 0.1s;
 }
 
-body{
-  margin:0;
-  font-family: "Comic Sans MS", sans-serif;
-  background:#ffd6e8;
-  text-align:center;
-  overflow:hidden;
-}
-
-.hidden{ display:none; }
-
-.screen{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:15px;
-}
-
-/* LOADING */
-#loadText{
-  font-size:22px;
-  font-weight:bold;
-}
-
-/* BUTTON */
+/* Button */
 button{
-  padding:12px 20px;
+  padding:12px 22px;
   border:none;
   border-radius:20px;
   background:#ff5fa2;
@@ -58,7 +55,7 @@ button{
   cursor:pointer;
 }
 
-/* CAKE */
+/* Cake */
 #cakeBox{
   position:relative;
 }
@@ -68,22 +65,11 @@ button{
 }
 
 #candle{
-  font-size:67px;
+  font-size:60px;
   position:absolute;
   top:-70px;
   left:50%;
   transform:translateX(-50%);
-  cursor:pointer;
-}
-
-#slice{
-  width:260px;
-  animation:pop 0.5s ease;
-}
-
-@keyframes pop{
-  from{ transform:scale(0.6); opacity:0; }
-  to{ transform:scale(1); opacity:1; }
 }
 </style>
 </head>
@@ -93,14 +79,15 @@ button{
 <!-- LOADING SCREEN -->
 <div id="loading" class="screen">
   <div id="loadText">Loading your cuteness 1%</div>
+
   <div id="barBox">
-  <div id="bar"></div>
+    <div id="bar"></div>
+  </div>
+
+  <button id="startBtn" class="hidden">Start 🎁</button>
 </div>
 
-  <button id="nextBtn" class="hidden">Start 🎁</button>
-</div>
-
-<!-- CAKE SCREEN -->
+<!-- NEXT SCREEN -->
 <div id="cakeScreen" class="screen hidden">
   <h2>Make a wish 🎉</h2>
 
@@ -109,42 +96,51 @@ button{
     <img src="cake.png" id="cake">
   </div>
 
-  <button onclick="blowCandle()">Blow the candle</button>
-  <button onclick="cutCake()">Cut the cake</button>
-</div>
-
-<!-- SLICE SCREEN -->
-<div id="sliceScreen" class="screen hidden">
-  <h2>YAYYYY 🍰</h2>
-  <div style="font-size:80px;">🍰</div>
-  <img src="cake_slice.png" id="slice">
+  <button onclick="blowCandle()">Blow candle</button>
 </div>
 
 <script>
 let percent = 1;
+
 const loadText = document.getElementById("loadText");
-const nextBtn = document.getElementById("nextBtn");
 const bar = document.getElementById("bar");
+const startBtn = document.getElementById("startBtn");
 
-nextBtn.style.display = "none";
+const loadingScreen = document.getElementById("loading");
+const cakeScreen = document.getElementById("cakeScreen");
 
-const loader = setInterval(()=>{
+/* LOADING */
+const loader = setInterval(() => {
   percent++;
   loadText.innerText = "Loading your cuteness " + percent + "%";
-  bar.style.width = (percent/222)*100 + "%";
+  bar.style.width = (percent / 222) * 100 + "%";
 
-  if(percent >= 222){
+  if (percent >= 222) {
     clearInterval(loader);
-    nextBtn.style.display = "inline-block";
+    startBtn.classList.remove("hidden");
   }
-},30);
+}, 30);
 
-nextBtn.addEventListener("click", ()=>{
-  document.getElementById("loading").classList.add("hidden");
-  document.getElementById("cakeScreen").classList.remove("hidden");
-});
+/* BUTTON WORKS — GUARANTEED */
+startBtn.onclick = function () {
+  loadingScreen.classList.add("hidden");
+  cakeScreen.classList.remove("hidden");
+};
+
+/* VIBRATION */
+function vibrate(ms){
+  if (navigator.vibrate) navigator.vibrate(ms);
+}
+
+/* CANDLE */
+function blowCandle(){
+  document.getElementById("candle").innerText = "💨";
+  vibrate(200);
+}
 </script>
+
 </body>
 </html>
+
 
  
