@@ -121,11 +121,13 @@ function flipCard(card){
 </div>
 
 <!-- INTRO -->
-<div id="intro" class="hidden fade">
-  <img src="rabbit.png" width="180"><br>
-  <h2>20 years ago a dollkeeper was born</h2>
-  <button onclick="showCards()">Next</button>
+<div id="loading">
+  <p id="loadText">Loading your cuteness 1%</p>
+  <div class="progress">
+    <div id="bar"></div>
+  </div>
 </div>
+
 
 <!-- CARDS -->
 <div id="cards" class="hidden fade">
@@ -180,22 +182,21 @@ function flipCard(card){
 </div>
 
 <script>
-let p = 1;
-let text = "";
-
+let load = 0;
 const bar = document.getElementById("bar");
-const percent = document.getElementById("percent");
+const text = document.getElementById("loadText");
 
-let load = setInterval(()=>{
-  p++;
-  bar.style.width = p + "%";
-  percent.innerText = p + "%";
-  if(p >= 222){
-    clearInterval(load);
-    document.getElementById("loading").classList.add("hidden");
-    document.getElementById("intro").classList.remove("hidden");
+const interval = setInterval(() => {
+  load++;
+  bar.style.width = (load / 222) * 100 + "%";
+  text.innerText = "Loading your cuteness " + load + "%";
+
+  if (load >= 222) {
+    clearInterval(interval);
+    document.getElementById("startBtn").style.display = "block";
   }
-},15);
+}, 15);
+
 
 function showCards(){
   document.getElementById("intro").classList.add("hidden");
