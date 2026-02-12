@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,18 +11,11 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(#ffe6f0, #fff);
   text-align: center;
+  overflow-x: hidden;
 }
 
 .hidden { display: none; }
-
-.screen {
-  min-height: 100vh;
-  padding: 20px;
-}
-
-img {
-  max-width: 80%;
-}
+.screen { min-height: 100vh; padding: 20px; position: relative; }
 
 button {
   background: #ff8fb1;
@@ -31,43 +24,51 @@ button {
   border-radius: 20px;
   font-size: 16px;
   margin: 10px;
-  cursor: pointer;
 }
 
-.progress {
-  width: 80%;
-  height: 20px;
-  background: #ddd;
-  margin: 20px auto;
-  border-radius: 10px;
-  overflow: hidden;
-}
+img { max-width: 80%; }
 
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: pink;
-}
+/* LOADING */
+.progress { width: 80%; height: 20px; background: #ddd; margin: auto; border-radius: 10px; }
+.bar { height: 100%; width: 0%; background: pink; }
 
-.cards {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+/* RABBIT */
+.rabbit { width: 200px; }
+.big-text { font-size: 22px; }
 
-.card {
-  width: 120px;
-  margin: 10px;
-  cursor: pointer;
-}
-
-.balloon {
-  width: 80px;
-  cursor: pointer;
-}
-
+/* CAKE */
+.cake-box { position: relative; display: inline-block; }
 .candle {
-  font-size: 50px;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 40px;
+}
+
+/* SCROLL MESSAGE */
+.scroll-box {
+  position: relative;
+}
+.scroll-text {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  font-size: 18px;
+}
+
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  top: -10px;
+  animation: fall 3s linear infinite;
+}
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(360deg); }
 }
 </style>
 </head>
@@ -75,121 +76,100 @@ button {
 <body>
 
 <!-- LOADING -->
-<div id="loading" class="screen">
+<div id="load" class="screen">
   <h2>Loading your cuteness…</h2>
-  <div class="progress">
-    <div id="bar" class="progress-bar"></div>
-  </div>
-  <p id="percent">1%</p>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <p id="per">1%</p>
 </div>
 
 <!-- INTRO -->
 <div id="intro" class="screen hidden">
-  <img src="rabbit.png">
-  <h2>A dollkeeper was born today</h2>
-  <p>20 years ago 💗</p>
+  <img src="rabbit.png" class="rabbit">
+  <p class="big-text">A dollkeeper was born today 💗<br>20 years ago</p>
   <button onclick="showCards()">Next</button>
 </div>
 
 <!-- CARDS -->
 <div id="cards" class="screen hidden">
   <h2>Pick a card 💌</h2>
-  <div class="cards">
-    <img class="card" src="card_spade.png" onclick="pickCard('You are strong and protective 💖')">
-    <img class="card" src="card_heart.png" onclick="pickCard('You love deeply and purely 💕')">
-    <img class="card" src="card_diamond.png" onclick="pickCard('You are rare and precious 💎')">
-    <img class="card" src="card_club.png" onclick="pickCard('You are brave even on hard days 🌱')">
-  </div>
+  <img src="card_spade.png" width="120" onclick="pick('You protect everyone 💖')">
+  <img src="card_heart.png" width="120" onclick="pick('You love deeply 💕')">
+  <img src="card_diamond.png" width="120" onclick="pick('You are rare 💎')">
+  <img src="card_club.png" width="120" onclick="pick('You are strong 🌱')">
 </div>
 
-<!-- CARD MESSAGE -->
 <div id="cardMsg" class="screen hidden">
   <h2 id="msg"></h2>
-  <button onclick="showCake()">Go to cake 🎂</button>
+  <button onclick="showCake()">Cake time 🎂</button>
 </div>
 
 <!-- CAKE -->
 <div id="cake" class="screen hidden">
-  <img id="cakeImg" src="cake_plain.png">
-  <br>
-  <button onclick="decorate()">Decorate the cake</button>
-  <button onclick="lightCandle()">Light the candle</button>
-  <div id="candle" class="candle hidden">🕯️</div>
-  <br>
-  <button onclick="blowCandle()">Blow the candle</button>
+  <div class="cake-box">
+    <div id="candle" class="candle hidden">🕯️</div>
+    <img id="cakeImg" src="cake_plain.png">
+  </div><br>
+
+  <button id="btn1" onclick="decorate()">Decorate cake</button>
+  <button id="btn2" class="hidden" onclick="light()">Light candle</button>
+  <button id="btn3" class="hidden" onclick="blow()">Blow candle</button>
 </div>
 
 <!-- BALLOONS -->
 <div id="balloons" class="screen hidden">
-  <h2 id="balloonText"></h2>
-  <img class="balloon" src="balloon.png" onclick="pop(this,'YOU')">
-  <img class="balloon" src="balloon.png" onclick="pop(this,'ARE')">
-  <img class="balloon" src="balloon.png" onclick="pop(this,'SO')">
-  <img class="balloon" src="balloon.png" onclick="pop(this,'AMAZING 💖')">
+  <h2 id="words"></h2>
+  <img src="balloon.png" width="80" onclick="pop(this,'YOU')">
+  <img src="balloon.png" width="80" onclick="pop(this,'ARE')">
+  <img src="balloon.png" width="80" onclick="pop(this,'SO')">
+  <img src="balloon.png" width="80" onclick="pop(this,'AMAZING 💖')">
 </div>
 
-<!-- FINAL MESSAGE -->
+<!-- FINAL -->
 <div id="final" class="screen hidden">
-  <img src="scroll.png">
-  <h2>Final Message</h2>
-  <p>✨ WRITE YOUR BIRTHDAY MESSAGE HERE ✨</p>
+  <div class="scroll-box">
+    <img src="scroll.png">
+    <div class="scroll-text">
+      ✨ WRITE YOUR FINAL MESSAGE HERE ✨
+    </div>
+  </div>
 </div>
 
 <script>
-let p = 1;
-let bar = document.getElementById("bar");
-let percent = document.getElementById("percent");
+let p=1, bar=document.getElementById("bar"), per=document.getElementById("per");
+let load=setInterval(()=>{
+  p++; bar.style.width=p+"%"; per.innerText=p+"%";
+  if(p>=222){clearInterval(load); loadDiv();}
+},20);
 
-let loader = setInterval(() => {
-  p++;
-  bar.style.width = p + "%";
-  percent.innerText = p + "%";
-  if (p >= 222) {
-    clearInterval(loader);
-    loading.classList.add("hidden");
-    intro.classList.remove("hidden");
+function loadDiv(){load.classList.add("hidden"); intro.classList.remove("hidden");}
+function showCards(){intro.classList.add("hidden"); cards.classList.remove("hidden");}
+function pick(t){cards.classList.add("hidden"); cardMsg.classList.remove("hidden"); msg.innerText=t;}
+function showCake(){cardMsg.classList.add("hidden"); cake.classList.remove("hidden");}
+function decorate(){cakeImg.src="cake_decorated.png"; btn1.classList.add("hidden"); btn2.classList.remove("hidden");}
+function light(){candle.classList.remove("hidden"); btn2.classList.add("hidden"); btn3.classList.remove("hidden");}
+function blow(){
+  candle.innerText="💨";
+  cake.innerHTML+="<h2>🍰 Cake cut!</h2>";
+  confetti();
+  setTimeout(()=>{cake.classList.add("hidden"); balloons.classList.remove("hidden");},1000);
+}
+
+function pop(el,word){
+  el.style.display="none";
+  words.innerText+=" "+word;
+  if(document.querySelectorAll("#balloons img:not([style])").length===0){
+    setTimeout(()=>{balloons.classList.add("hidden"); final.classList.remove("hidden");},800);
   }
-}, 25);
-
-function showCards() {
-  intro.classList.add("hidden");
-  cards.classList.remove("hidden");
 }
 
-function pickCard(text) {
-  cards.classList.add("hidden");
-  cardMsg.classList.remove("hidden");
-  msg.innerText = text;
-}
-
-function showCake() {
-  cardMsg.classList.add("hidden");
-  cake.classList.remove("hidden");
-}
-
-function decorate() {
-  cakeImg.src = "cake_decorated.png";
-}
-
-function lightCandle() {
-  candle.classList.remove("hidden");
-}
-
-function blowCandle() {
-  candle.style.display = "none";
-  if (navigator.vibrate) navigator.vibrate(200);
-  cake.classList.add("hidden");
-  balloons.classList.remove("hidden");
-}
-
-function pop(el, word) {
-  el.style.display = "none";
-  balloonText.innerText += " " + word;
-  if (document.querySelectorAll(".balloon:not([style*='none'])").length === 0) {
-    setTimeout(() => {
-      balloons.classList.add("hidden");
-      final.classList.remove("hidden");
-    }, 800);
+function confetti(){
+  for(let i=0;i<40;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=`hsl(${Math.random()*360},100%,70%)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
   }
 }
 </script>
