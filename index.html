@@ -163,7 +163,19 @@ img {
 </div>
 
 <script>
-let percent = 1;
-let loader = setInterval(() => {
-  percent++;
-  document.getElementById("load").
+window.onload = () => {
+  let percent = 1;
+  const loadText = document.getElementById("load");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const loader = setInterval(() => {
+    percent += 1;
+    loadText.innerText = percent + "%";
+
+    if (percent >= 222) {
+      clearInterval(loader);
+      nextBtn.style.display = "inline-block";
+    }
+  }, 30);
+};
+
