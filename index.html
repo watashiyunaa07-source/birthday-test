@@ -6,74 +6,98 @@
 <title>Birthday Surprise</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(#ffe6f0, #fff);
-  text-align: center;
-  overflow-x: hidden;
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(#ffd6e8,#fff);
+  text-align:center;
+  overflow-x:hidden;
+}
+.hidden{display:none;}
+.screen{min-height:100vh;padding:20px;position:relative;}
+
+button{
+  background:#ff8fb1;
+  border:none;
+  padding:12px 24px;
+  border-radius:25px;
+  font-size:16px;
+  margin:10px;
+  cursor:pointer;
+  animation:fadeIn .6s ease;
 }
 
-.hidden { display: none; }
-.screen { min-height: 100vh; padding: 20px; position: relative; }
+img{max-width:80%;}
 
-button {
-  background: #ff8fb1;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 20px;
-  font-size: 16px;
-  margin: 10px;
+/* Animations */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
 }
 
-img { max-width: 80%; }
+/* Loading */
+.progress{width:80%;height:20px;background:#eee;margin:auto;border-radius:10px;overflow:hidden;}
+.bar{height:100%;width:0%;background:#ff9ec4;}
 
-/* LOADING */
-.progress { width: 80%; height: 20px; background: #ddd; margin: auto; border-radius: 10px; }
-.bar { height: 100%; width: 0%; background: pink; }
+/* Intro */
+.rabbit{width:180px;animation:bounce 2s infinite;}
+.big-text{font-size:22px;}
 
-/* RABBIT */
-.rabbit { width: 200px; }
-.big-text { font-size: 22px; }
-
-/* CAKE */
-.cake-box { position: relative; display: inline-block; }
-.candle {
-  position: absolute;
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 40px;
+/* Cake */
+.cake-box{position:relative;display:inline-block;}
+.cake-img{
+  filter:drop-shadow(0 10px 20px rgba(255,150,180,.4));
+}
+.candle{
+  position:absolute;
+  top:-55px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:70px;
 }
 
-/* SCROLL MESSAGE */
-.scroll-box {
-  position: relative;
-}
-.scroll-text {
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-  font-size: 18px;
+/* Cake cut animation */
+.cut{animation:cutAnim .6s ease forwards;}
+@keyframes cutAnim{
+  0%{transform:scale(1);}
+  50%{transform:scale(.95) rotate(-2deg);}
+  100%{transform:scale(1);}
 }
 
-/* CONFETTI */
-.confetti {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  top: -10px;
-  animation: fall 3s linear infinite;
+/* Scroll */
+.scroll-box{position:relative;display:inline-block;}
+.scroll-text{
+  position:absolute;
+  top:38%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:70%;
+  font-size:18px;
 }
-@keyframes fall {
-  to { transform: translateY(100vh) rotate(360deg); }
+
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  top:-10px;
+  animation:fall 3s linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);}
 }
 </style>
 </head>
 
 <body>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <!-- LOADING -->
 <div id="load" class="screen">
@@ -92,10 +116,10 @@ img { max-width: 80%; }
 <!-- CARDS -->
 <div id="cards" class="screen hidden">
   <h2>Pick a card 💌</h2>
-  <img src="card_spade.png" width="120" onclick="pick('spade-your strong and slayy')">
-  <img src="card_heart.png" width="120" onclick="pick('heart-you are psychological player 💕')">
-  <img src="card_diamond.png" width="120" onclick="pick('diamond-your smart and intelligent 💎')">
-  <img src="card_club.png" width="120" onclick="pick('club-You are all rounder u can lead a team')">
+  <img src="card_spade.png" width="120" onclick="pick('You protect everyone 💖')">
+  <img src="card_heart.png" width="120" onclick="pick('You love deeply 💕')">
+  <img src="card_diamond.png" width="120" onclick="pick('You are rare 💎')">
+  <img src="card_club.png" width="120" onclick="pick('You are strong 🌱')">
 </div>
 
 <div id="cardMsg" class="screen hidden">
@@ -107,7 +131,7 @@ img { max-width: 80%; }
 <div id="cake" class="screen hidden">
   <div class="cake-box">
     <div id="candle" class="candle hidden">🕯️</div>
-    <img id="cakeImg" src="cake_plain.png">
+    <img id="cakeImg" src="cake_plain.png" class="cake-img">
   </div><br>
 
   <button id="btn1" onclick="decorate()">Decorate cake</button>
@@ -129,40 +153,67 @@ img { max-width: 80%; }
   <div class="scroll-box">
     <img src="scroll.png">
     <div class="scroll-text">
-      ✨ helllo bestie how have u been i wish u happy birthday and may god bless u✨
+      ✨ WRITE YOUR FINAL BIRTHDAY MESSAGE HERE ✨
     </div>
   </div>
 </div>
 
 <script>
-let p=1, bar=document.getElementById("bar"), per=document.getElementById("per");
-let load=setInterval(()=>{
-  p++; bar.style.width=p+"%"; per.innerText=p+"%";
-  if(p>=222){clearInterval(load); loadDiv();}
+let p=1,bar=document.getElementById("bar"),per=document.getElementById("per");
+let loadInt=setInterval(()=>{
+  p++;bar.style.width=p+"%";per.innerText=p+"%";
+  if(p>=222){
+    clearInterval(loadInt);
+    vibrate(100);
+    load.classList.add("hidden");
+    intro.classList.remove("hidden");
+    bgMusic.play().catch(()=>{});
+  }
 },20);
 
-function loadDiv(){
-  document.getElementById("load").classList.add("hidden");
-  document.getElementById("intro").classList.remove("hidden");
+function vibrate(ms){
+  if(navigator.vibrate) navigator.vibrate(ms);
 }
 
-function showCards(){intro.classList.add("hidden"); cards.classList.remove("hidden");}
-function pick(t){cards.classList.add("hidden"); cardMsg.classList.remove("hidden"); msg.innerText=t;}
-function showCake(){cardMsg.classList.add("hidden"); cake.classList.remove("hidden");}
-function decorate(){cakeImg.src="cake_decorated.png"; btn1.classList.add("hidden"); btn2.classList.remove("hidden");}
-function light(){candle.classList.remove("hidden"); btn2.classList.add("hidden"); btn3.classList.remove("hidden");}
+function showCards(){vibrate(50);intro.classList.add("hidden");cards.classList.remove("hidden");}
+function pick(t){vibrate(70);cards.classList.add("hidden");cardMsg.classList.remove("hidden");msg.innerText=t;}
+function showCake(){vibrate(50);cardMsg.classList.add("hidden");cake.classList.remove("hidden");}
+
+function decorate(){
+  vibrate(80);
+  cakeImg.src="cake_decorated.png";
+  btn1.classList.add("hidden");
+  btn2.classList.remove("hidden");
+}
+
+function light(){
+  vibrate([100,50,100]);
+  candle.classList.remove("hidden");
+  btn2.classList.add("hidden");
+  btn3.classList.remove("hidden");
+}
+
 function blow(){
+  vibrate([200,100,200]);
+  cakeImg.classList.add("cut");
   candle.innerText="💨";
-  cake.innerHTML+="<h2>🍰 Cake cut!</h2>";
-  confetti();
-  setTimeout(()=>{cake.classList.add("hidden"); balloons.classList.remove("hidden");},1000);
+  setTimeout(()=>{
+    cake.innerHTML+="<h1 style='font-size:50px;'>🍰</h1>";
+    confetti();
+    setTimeout(()=>{
+      cake.classList.add("hidden");
+      balloons.classList.remove("hidden");
+    },1000);
+  },600);
 }
 
 function pop(el,word){
+  vibrate(40);
   el.style.display="none";
   words.innerText+=" "+word;
-  if(document.querySelectorAll("#balloons img:not([style])").length===0){
-    setTimeout(()=>{balloons.classList.add("hidden"); final.classList.remove("hidden");},800);
+  if(document.querySelectorAll("#balloons img:not([style*='none'])").length===0){
+    vibrate([150,80,150]);
+    setTimeout(()=>{balloons.classList.add("hidden");final.classList.remove("hidden");},800);
   }
 }
 
