@@ -92,10 +92,10 @@ img { max-width: 80%; }
 <!-- CARDS -->
 <div id="cards" class="screen hidden">
   <h2>Pick a card 💌</h2>
-  <img src="card_spade.png" width="120" onclick="pick('You protect everyone 💖')">
-  <img src="card_heart.png" width="120" onclick="pick('You love deeply 💕')">
-  <img src="card_diamond.png" width="120" onclick="pick('You are rare 💎')">
-  <img src="card_club.png" width="120" onclick="pick('You are strong 🌱')">
+  <img src="card_spade.png" width="120" onclick="pick('spade-your strong and slayy')">
+  <img src="card_heart.png" width="120" onclick="pick('heart-you are psychological player 💕')">
+  <img src="card_diamond.png" width="120" onclick="pick('diamond-your smart and intelligent 💎')">
+  <img src="card_club.png" width="120" onclick="pick('club-You are all rounder u can lead a team')">
 </div>
 
 <div id="cardMsg" class="screen hidden">
@@ -129,7 +129,7 @@ img { max-width: 80%; }
   <div class="scroll-box">
     <img src="scroll.png">
     <div class="scroll-text">
-      ✨ WRITE YOUR FINAL MESSAGE HERE ✨
+      ✨ helllo bestie how have u been i wish u happy birthday and may god bless u✨
     </div>
   </div>
 </div>
@@ -141,7 +141,11 @@ let load=setInterval(()=>{
   if(p>=222){clearInterval(load); loadDiv();}
 },20);
 
-function loadDiv(){load.classList.add("hidden"); intro.classList.remove("hidden");}
+function loadDiv(){
+  document.getElementById("load").classList.add("hidden");
+  document.getElementById("intro").classList.remove("hidden");
+}
+
 function showCards(){intro.classList.add("hidden"); cards.classList.remove("hidden");}
 function pick(t){cards.classList.add("hidden"); cardMsg.classList.remove("hidden"); msg.innerText=t;}
 function showCake(){cardMsg.classList.add("hidden"); cake.classList.remove("hidden");}
