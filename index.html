@@ -1,233 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(#ffd6e8,#fff);
-  text-align:center;
-  overflow-x:hidden;
-}
-.hidden{display:none;}
-.screen{min-height:100vh;padding:20px;position:relative;}
-
-button{
-  background:#ff8fb1;
-  border:none;
-  padding:12px 24px;
-  border-radius:25px;
-  font-size:16px;
-  margin:10px;
-  cursor:pointer;
-  animation:fadeIn .6s ease;
+body {
+  margin: 0;
+  background: #ffd6e8;
+  font-family: "Comic Sans MS", sans-serif;
+  text-align: center;
+  overflow: hidden;
 }
 
-img{max-width:80%;}
-
-/* Animations */
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
+.screen {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  padding: 20px;
 }
 
-/* Loading */
-.progress{width:80%;height:20px;background:#eee;margin:auto;border-radius:10px;overflow:hidden;}
-.bar{height:100%;width:0%;background:#ff9ec4;}
+.active {
+  display: block;
+}
 
-/* Intro */
-.rabbit{width:180px;animation:bounce 2s infinite;}
-.big-text{font-size:22px;}
+button {
+  background: #ff7eb9;
+  border: none;
+  padding: 14px 22px;
+  font-size: 18px;
+  border-radius: 25px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+img {
+  max-width: 80%;
+}
 
 /* Cake */
-.cake-box{position:relative;display:inline-block;}
-.cake-img{
-  filter:drop-shadow(0 10px 20px rgba(255,150,180,.4));
-}
-.candle{
-  position:absolute;
-  top:-55px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:70px;
+#cakeBox {
+  position: relative;
 }
 
-/* Cake cut animation */
-.cut{animation:cutAnim .6s ease forwards;}
-@keyframes cutAnim{
-  0%{transform:scale(1);}
-  50%{transform:scale(.95) rotate(-2deg);}
-  100%{transform:scale(1);}
+#cake {
+  width: 220px;
+}
+
+/* Candle */
+#candle {
+  font-size: 60px;
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+}
+
+/* Swipe line */
+#cutLine {
+  position: absolute;
+  width: 6px;
+  height: 240px;
+  background: red;
+  left: 50%;
+  top: 0;
+  display: none;
+}
+
+/* Big cake emoji */
+.bigCake {
+  font-size: 120px;
 }
 
 /* Scroll */
-.scroll-box{position:relative;display:inline-block;}
-.scroll-text{
-  position:absolute;
-  top:38%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:70%;
-  font-size:18px;
+#scrollBox {
+  position: relative;
 }
 
-/* Confetti */
-.confetti{
-  position:fixed;
-  width:8px;
-  height:8px;
-  top:-10px;
-  animation:fall 3s linear infinite;
+#scrollBox img {
+  width: 260px;
 }
-@keyframes fall{
-  to{transform:translateY(100vh) rotate(360deg);}
+
+#scrollText {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
+<audio id="music" src="music.mp3" loop></audio>
 
-<!-- LOADING -->
-<div id="load" class="screen">
+<!-- SCREEN 1 -->
+<div class="screen active" id="s1">
+  <img src="rabbit.png" width="120">
   <h2>Loading your cuteness…</h2>
-  <div class="progress"><div id="bar" class="bar"></div></div>
-  <p id="per">1%</p>
+  <h3 id="load">1%</h3>
+  <button id="nextBtn" style="display:none" onclick="go(2)">Start 🎁</button>
 </div>
 
-<!-- INTRO -->
-<div id="intro" class="screen hidden">
-  <img src="rabbit.png" class="rabbit">
-  <p class="big-text">A dollkeeper was born today 💗<br>20 years ago</p>
-  <button onclick="showCards()">Next</button>
+<!-- SCREEN 2 -->
+<div class="screen" id="s2">
+  <h2>Decorate the cake</h2>
+  <div id="cakeBox">
+    <img id="cake" src="cake.png">
+  </div>
+  <button onclick="decorate()">Decorate Cake</button>
 </div>
 
-<!-- CARDS -->
-<div id="cards" class="screen hidden">
-  <h2>Pick a card 💌</h2>
-  <img src="card_spade.png" width="120" onclick="pick('You protect everyone 💖')">
-  <img src="card_heart.png" width="120" onclick="pick('You love deeply 💕')">
-  <img src="card_diamond.png" width="120" onclick="pick('You are rare 💎')">
-  <img src="card_club.png" width="120" onclick="pick('You are strong 🌱')">
+<!-- SCREEN 3 -->
+<div class="screen" id="s3">
+  <h2>Light the candle</h2>
+  <div id="cakeBox">
+    <img src="cake_decorated.png" width="220">
+    <div id="candle">🕯️</div>
+  </div>
+  <button onclick="lightCandle()">Light Candle</button>
 </div>
 
-<div id="cardMsg" class="screen hidden">
-  <h2 id="msg"></h2>
-  <button onclick="showCake()">Cake time 🎂</button>
+<!-- SCREEN 4 -->
+<div class="screen" id="s4">
+  <h2>Blow the candle</h2>
+  <div id="cakeBox">
+    <img src="cake_decorated.png" width="220">
+    <div id="candle">🕯️</div>
+  </div>
+  <button onclick="blow()">Blow Candle</button>
 </div>
 
-<!-- CAKE -->
-<div id="cake" class="screen hidden">
-  <div class="cake-box">
-    <div id="candle" class="candle hidden">🕯️</div>
-    <img id="cakeImg" src="cake_plain.png" class="cake-img">
-  </div><br>
-
-  <button id="btn1" onclick="decorate()">Decorate cake</button>
-  <button id="btn2" class="hidden" onclick="light()">Light candle</button>
-  <button id="btn3" class="hidden" onclick="blow()">Blow candle</button>
+<!-- SCREEN 5 -->
+<div class="screen" id="s5">
+  <h2>Swipe to cut the cake</h2>
+  <div id="cakeBox">
+    <img src="cake_decorated.png" id="cake">
+    <div id="cutLine"></div>
+  </div>
 </div>
 
-<!-- BALLOONS -->
-<div id="balloons" class="screen hidden">
-  <h2 id="words"></h2>
-  <img src="balloon.png" width="80" onclick="pop(this,'YOU')">
-  <img src="balloon.png" width="80" onclick="pop(this,'ARE')">
-  <img src="balloon.png" width="80" onclick="pop(this,'SO')">
-  <img src="balloon.png" width="80" onclick="pop(this,'AMAZING 💖')">
+<!-- SCREEN 6 -->
+<div class="screen" id="s6">
+  <div class="bigCake">🎂</div>
+  <h2>HAPPY BIRTHDAY!</h2>
+  <button onclick="go(7)">Final Message</button>
 </div>
 
-<!-- FINAL -->
-<div id="final" class="screen hidden">
-  <div class="scroll-box">
+<!-- SCREEN 7 -->
+<div class="screen" id="s7">
+  <div id="scrollBox">
     <img src="scroll.png">
-    <div class="scroll-text">
-      ✨ WRITE YOUR FINAL BIRTHDAY MESSAGE HERE ✨
+    <div id="scrollText">
+      You are so important, loved, and special 💖  
+      Never forget how amazing you are.
     </div>
   </div>
 </div>
 
 <script>
-let p=1,bar=document.getElementById("bar"),per=document.getElementById("per");
-let loadInt=setInterval(()=>{
-  p++;bar.style.width=p+"%";per.innerText=p+"%";
-  if(p>=222){
-    clearInterval(loadInt);
-    vibrate(100);
-    load.classList.add("hidden");
-    intro.classList.remove("hidden");
-    bgMusic.play().catch(()=>{});
-  }
-},20);
-
-function vibrate(ms){
-  if(navigator.vibrate) navigator.vibrate(ms);
-}
-
-function showCards(){vibrate(50);intro.classList.add("hidden");cards.classList.remove("hidden");}
-function pick(t){vibrate(70);cards.classList.add("hidden");cardMsg.classList.remove("hidden");msg.innerText=t;}
-function showCake(){vibrate(50);cardMsg.classList.add("hidden");cake.classList.remove("hidden");}
-
-function decorate(){
-  vibrate(80);
-  cakeImg.src="cake_decorated.png";
-  btn1.classList.add("hidden");
-  btn2.classList.remove("hidden");
-}
-
-function light(){
-  vibrate([100,50,100]);
-  candle.classList.remove("hidden");
-  btn2.classList.add("hidden");
-  btn3.classList.remove("hidden");
-}
-
-function blow(){
-  vibrate([200,100,200]);
-  cakeImg.classList.add("cut");
-  candle.innerText="💨";
-  setTimeout(()=>{
-    cake.innerHTML+="<h1 style='font-size:50px;'>🍰</h1>";
-    confetti();
-    setTimeout(()=>{
-      cake.classList.add("hidden");
-      balloons.classList.remove("hidden");
-    },1000);
-  },600);
-}
-
-function pop(el,word){
-  vibrate(40);
-  el.style.display="none";
-  words.innerText+=" "+word;
-  if(document.querySelectorAll("#balloons img:not([style*='none'])").length===0){
-    vibrate([150,80,150]);
-    setTimeout(()=>{balloons.classList.add("hidden");final.classList.remove("hidden");},800);
-  }
-}
-
-function confetti(){
-  for(let i=0;i<40;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=`hsl(${Math.random()*360},100%,70%)`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
-  }
-}
-</script>
-
-</body>
-</html>
+let percent = 1;
+let loader = setInterval(() => {
+  percent++;
+  document.getElementById("load").
