@@ -6,6 +6,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  #barBox{
+  width:220px;
+  height:14px;
+  background:#ffe6f1;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+#bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff69b4,#ffb6d9);
+  border-radius:20px;
+  transition:width 0.1s;
+}
+
 body{
   margin:0;
   font-family: "Comic Sans MS", sans-serif;
@@ -77,6 +93,10 @@ button{
 <!-- LOADING SCREEN -->
 <div id="loading" class="screen">
   <div id="loadText">Loading your cuteness 1%</div>
+  <div id="barBox">
+  <div id="bar"></div>
+</div>
+
   <button id="nextBtn" class="hidden">Start 🎁</button>
 </div>
 
@@ -101,46 +121,29 @@ button{
 </div>
 
 <script>
-/* LOADING */
 let percent = 1;
 const loadText = document.getElementById("loadText");
 const nextBtn = document.getElementById("nextBtn");
+const bar = document.getElementById("bar");
+
+nextBtn.style.display = "none";
 
 const loader = setInterval(()=>{
   percent++;
   loadText.innerText = "Loading your cuteness " + percent + "%";
+  bar.style.width = (percent/222)*100 + "%";
+
   if(percent >= 222){
     clearInterval(loader);
-    nextBtn.classList.remove("hidden");
+    nextBtn.style.display = "inline-block";
   }
 },30);
 
-nextBtn.onclick = ()=>{
+nextBtn.addEventListener("click", ()=>{
   document.getElementById("loading").classList.add("hidden");
   document.getElementById("cakeScreen").classList.remove("hidden");
-};
-
-/* VIBRATION SAFE FUNCTION */
-function vibrate(ms){
-  if(navigator.vibrate){
-    navigator.vibrate(ms);
-  }
-}
-
-/* CANDLE */
-function blowCandle(){
-  document.getElementById("candle").innerText = "💨";
-  vibrate(200);
-}
-
-/* CUT CAKE */
-function cutCake(){
-  vibrate([100,50,100]);
-  document.getElementById("cakeScreen").classList.add("hidden");
-  document.getElementById("sliceScreen").classList.remove("hidden");
-}
+});
 </script>
-
 </body>
 </html>
 
