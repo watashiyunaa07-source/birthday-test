@@ -2,120 +2,97 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Birthday Surprise</title>
+<title>Birthday Surprise 🎂</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
-  margin:0;
-  font-family:'Comic Sans MS',cursive;
-  background:#ffd6e8;
-  overflow:hidden;
-  text-align:center;
-}
-.screen{
-  display:none;
-  height:100vh;
-  width:100vw;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-}
-.show{display:flex}
-
-button{
-  padding:12px 24px;
-  border:none;
-  border-radius:25px;
-  background:#ff6fae;
-  color:white;
-  font-size:18px;
-  cursor:pointer;
-  margin-top:20px;
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", cursive;
+  background: #ffd6e8;
+  text-align: center;
+  overflow-x: hidden;
 }
 
-.progress{
-  width:80%;
-  height:18px;
-  background:white;
-  border-radius:20px;
-  overflow:hidden;
-}
-.bar{
-  height:100%;
-  width:0%;
-  background:#ff6fae;
+.hidden { display: none; }
+
+button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 20px;
+  background: #ff6fa5;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 15px;
 }
 
-.card-grid{
-  display:grid;
-  grid-template-columns:repeat(2,140px);
-  gap:20px;
+.fade {
+  animation: fade 0.6s ease;
 }
-.card{
-  width:140px;
-  height:180px;
-  perspective:800px;
-}
-.card-inner{
-  width:100%;
-  height:100%;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:0.6s;
-}
-.card.flip .card-inner{transform:rotateY(180deg)}
-.card-face{
-  position:absolute;
-  width:100%;
-  height:100%;
-  backface-visibility:hidden;
-  border-radius:15px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:40px;
-  background:white;
-}
-.card-back{
-  transform:rotateY(180deg);
-  font-size:16px;
-  padding:10px;
+@keyframes fade {
+  from {opacity:0; transform: scale(0.95);}
+  to {opacity:1; transform: scale(1);}
 }
 
-#cakeWrap{position:relative}
-#cakeImg{
-  width:280px;
-  transition:opacity 1s;
+/* LOADING */
+#progress {
+  width: 80%;
+  height: 18px;
+  background: white;
+  margin: 20px auto;
+  border-radius: 20px;
+  overflow: hidden;
 }
-.candles{
-  position:absolute;
-  top:-40px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:15px;
-  font-size:40px;
-}
-.candle{filter:drop-shadow(0 0 6px orange)}
-
-.confetti{
-  position:fixed;
-  width:8px;
-  height:8px;
-  animation:fall 3s linear infinite;
-}
-@keyframes fall{
-  to{transform:translateY(100vh) rotate(360deg)}
+#bar {
+  height: 100%;
+  width: 1%;
+  background: #ff6fa5;
 }
 
-.scroll{
-  width:80%;
-  animation:pop 1s ease;
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
 }
-@keyframes pop{
-  from{transform:scale(0)}
-  to{transform:scale(1)}
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  font-size: 22px;
+  cursor: pointer;
+}
+.card.flipped {
+  background: #ffb3d9;
+}
+
+/* CAKE */
+#cakeBox {
+  position: relative;
+}
+#cakeImg {
+  width: 280px;
+}
+.candle {
+  position: absolute;
+  top: -40px;
+  width: 20px;
+}
+
+/* BALLOONS */
+.balloon {
+  font-size: 50px;
+  cursor: pointer;
+}
+
+/* SCROLL */
+#scroll {
+  background: #fff3c4;
+  padding: 30px;
+  border-radius: 20px;
+  margin: 20px;
 }
 </style>
 </head>
@@ -125,146 +102,132 @@ button{
 <audio id="music" src="birthday.mp3" loop></audio>
 
 <!-- LOADING -->
-<div id="loading" class="screen show">
-  <h2>Loading your cuteness 💗</h2>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-  <p id="percent">0%</p>
+<div id="loading">
+  <h2>Loading your cuteness… <span id="percent">1%</span></h2>
+  <div id="progress"><div id="bar"></div></div>
 </div>
 
-<!-- BORN -->
-<div id="born" class="screen">
-  <img src="rabbit.png" width="180">
-  <h2>20 years ago<br>a Dollkeeper was born ✨</h2>
-  <button onclick="next('cards')">Next</button>
+<!-- INTRO -->
+<div id="intro" class="hidden fade">
+  <img src="rabbit.png" width="180"><br>
+  <h2>20 years ago a dollkeeper was born</h2>
+  <button onclick="showCards()">Next</button>
 </div>
 
 <!-- CARDS -->
-<div id="cards" class="screen">
-  <h2>Pick your cards 💌</h2>
-  <div class="card-grid">
-    <div class="card" onclick="flip(this,'You are magic ✨')">♠</div>
-    <div class="card" onclick="flip(this,'So loved 💗')">♥</div>
-    <div class="card" onclick="flip(this,'Pure joy 🌸')">♦</div>
-    <div class="card" onclick="flip(this,'Forever special ⭐')">♣</div>
+<div id="cards" class="hidden fade">
+  <h2>Pick a card 💖</h2>
+  <div class="cards">
+    <div class="card" onclick="flip(this,'You are deeply loved')">♠</div>
+    <div class="card" onclick="flip(this,'You make life brighter')">♥</div>
+    <div class="card" onclick="flip(this,'You are one of a kind')">♦</div>
+    <div class="card" onclick="flip(this,'You matter so much')">♣</div>
   </div>
-  <button id="goCake" style="display:none" onclick="next('cake')">Go to Cake 🎂</button>
+  <button onclick="showCake()">Go to Cake</button>
 </div>
 
 <!-- CAKE -->
-<div id="cake" class="screen">
-  <div id="cakeWrap">
-    <div class="candles">
-      <div class="candle">🕯️</div>
-      <div class="candle">🕯️</div>
-      <div class="candle">🕯️</div>
-    </div>
+<div id="cake" class="hidden fade">
+  <div id="cakeBox">
     <img id="cakeImg" src="cake_plain.png">
+    <img class="candle" src="https://i.imgur.com/2cOaJ.png" style="left:110px">
+    <img class="candle" src="https://i.imgur.com/2cOaJ.png" style="left:140px">
+    <img class="candle" src="https://i.imgur.com/2cOaJ.png" style="left:170px">
   </div>
-  <button id="decorateBtn" onclick="decorate()">Decorate Cake ✨</button>
-  <button id="cutBtn" style="display:none" onclick="next('cut')">Cut Cake 🎂</button>
+  <br>
+  <button onclick="decorate()">Decorate Cake</button>
+  <button onclick="blow()">Blow Candles</button>
 </div>
 
 <!-- CUT -->
-<div id="cut" class="screen">
-  <h2>Swipe to cut the cake 🍰</h2>
-  <img src="cake_decorated.png" width="280"
-       ontouchmove="cutCake()" onmousemove="cutCake()">
-</div>
-
-<!-- EMOJI -->
-<div id="emoji" class="screen">
-  <div style="font-size:120px">🎂</div>
-  <button onclick="next('balloons')">Continue</button>
+<div id="cut" class="hidden fade">
+  <h2>Swipe to cut the cake</h2>
+  <div style="font-size:80px" onclick="afterCut()">🍰</div>
 </div>
 
 <!-- BALLOONS -->
-<div id="balloons" class="screen">
+<div id="balloons" class="hidden fade">
   <h2 id="amazing"></h2>
-  <img src="balloon.png" width="90" onclick="popBalloon(this)">
+  <div>
+    <span class="balloon" onclick="pop('Y')">🎈</span>
+    <span class="balloon" onclick="pop('O')">🎈</span>
+    <span class="balloon" onclick="pop('U')">🎈</span>
+    <span class="balloon" onclick="pop('!')">🎈</span>
+  </div>
 </div>
 
 <!-- FINAL -->
-<div id="final" class="screen">
-  <img src="rabbit.png" width="120">
-  <button onclick="next('scrollScreen')">Reveal Final Message 💗</button>
+<div id="final" class="hidden fade">
+  <button onclick="showScroll()">Show Final Message</button>
 </div>
 
-<div id="scrollScreen" class="screen">
-  <img src="scroll.png" class="scroll">
-  <p style="padding:20px;font-size:18px">
-    Happy Birthday 💗  
-    You are deeply loved and endlessly special.
-  </p>
+<div id="scroll" class="hidden fade">
+  <h2>💌 Your Final Message</h2>
+  <p>HIE BESTIE HAPPY BDAY I  LOB U SM 💖</p>
 </div>
 
 <script>
-const music=document.getElementById("music");
+let p = 1;
+let text = "";
 
-let p=0;
-const bar=document.getElementById("bar");
-const percent=document.getElementById("percent");
-let load=setInterval(()=>{
+const bar = document.getElementById("bar");
+const percent = document.getElementById("percent");
+
+let load = setInterval(()=>{
   p++;
-  bar.style.width=p/222*100+"%";
-  percent.innerText=p+"%";
-  if(p>=222){
+  bar.style.width = p + "%";
+  percent.innerText = p + "%";
+  if(p >= 222){
     clearInterval(load);
-    music.play();
-    next('born');
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("intro").classList.remove("hidden");
   }
-},20);
+},30);
 
-function next(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));
-  document.getElementById(id).classList.add('show');
-  navigator.vibrate?.(80);
-  confetti();
+function showCards(){
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("cards").classList.remove("hidden");
+  document.getElementById("music").play();
 }
 
-let flipped=0;
-function flip(card,msg){
-  if(card.classList.contains("flip"))return;
-  card.classList.add("flip");
-  card.innerHTML=`
-    <div class="card-inner">
-      <div class="card-face">${card.innerText}</div>
-      <div class="card-face card-back">${msg}</div>
-    </div>`;
-  flipped++;
-  if(flipped===4) document.getElementById("goCake").style.display="inline-block";
+function flip(el,msg){
+  el.classList.add("flipped");
+  el.innerText = msg;
+}
+
+function showCake(){
+  document.getElementById("cards").classList.add("hidden");
+  document.getElementById("cake").classList.remove("hidden");
 }
 
 function decorate(){
-  const cake=document.getElementById("cakeImg");
-  cake.style.opacity=0;
-  setTimeout(()=>{
-    cake.src="cake_decorated.png";
-    cake.style.opacity=1;
-    document.getElementById("decorateBtn").style.display="none";
-    document.getElementById("cutBtn").style.display="inline-block";
-    confetti();
-  },600);
+  document.getElementById("cakeImg").src = "cake_decorated.png";
 }
 
-function cutCake(){ next('emoji'); }
-
-let words=["YOU","ARE","AMAZING"];
-let i=0;
-function popBalloon(el){
-  el.style.display="none";
-  document.getElementById("amazing").innerText+= " "+words[i++];
-  if(i===3)setTimeout(()=>next('final'),800);
+function blow(){
+  document.querySelectorAll(".candle").forEach(c=>c.remove());
+  document.getElementById("cake").classList.add("hidden");
+  document.getElementById("cut").classList.remove("hidden");
 }
 
-function confetti(){
-  for(let i=0;i<25;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=`hsl(${Math.random()*360},100%,70%)`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+function afterCut(){
+  document.getElementById("cut").classList.add("hidden");
+  document.getElementById("balloons").classList.remove("hidden");
+}
+
+function pop(letter){
+  text += letter;
+  document.getElementById("amazing").innerText = text;
+  if(text.length >= 4){
+    setTimeout(()=>{
+      document.getElementById("balloons").classList.add("hidden");
+      document.getElementById("final").classList.remove("hidden");
+    },600);
   }
+}
+
+function showScroll(){
+  document.getElementById("scroll").classList.remove("hidden");
 }
 </script>
 
