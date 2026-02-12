@@ -26,7 +26,7 @@ body{
 
 /* Loading */
 #loadText{
-  font-size:22px;
+  font-size:24px;
   font-weight:bold;
 }
 
@@ -46,7 +46,7 @@ body{
 
 /* Button */
 button{
-  padding:12px 22px;
+  padding:12px 24px;
   border:none;
   border-radius:20px;
   background:#ff5fa2;
@@ -61,7 +61,7 @@ button{
 }
 
 #cake{
-  width:220px;
+  width:240px;
 }
 
 #candle{
@@ -87,60 +87,85 @@ button{
   <button id="startBtn" class="hidden">Start 🎁</button>
 </div>
 
-<!-- NEXT SCREEN -->
+<!-- CAKE SCREEN -->
 <div id="cakeScreen" class="screen hidden">
-  <h2>Make a wish 🎉</h2>
+  <h2>A dollkeeper was born today 💗</h2>
 
   <div id="cakeBox">
-    <div id="candle">🕯️</div>
-    <img src="cake.png" id="cake">
+    <div id="candle" class="hidden">🕯️</div>
+    <img src="cake_plain.png" id="cake">
   </div>
 
-  <button onclick="blowCandle()">Blow candle</button>
+  <button id="decorateBtn">Decorate the cake</button>
+  <button id="lightBtn" class="hidden">Light the candle</button>
+  <button id="blowBtn" class="hidden">Blow the candle</button>
 </div>
 
 <script>
-let percent = 1;
-
+/* ELEMENTS */
 const loadText = document.getElementById("loadText");
 const bar = document.getElementById("bar");
 const startBtn = document.getElementById("startBtn");
 
-const loadingScreen = document.getElementById("loading");
+const loading = document.getElementById("loading");
 const cakeScreen = document.getElementById("cakeScreen");
 
+const cakeImg = document.getElementById("cake");
+const decorateBtn = document.getElementById("decorateBtn");
+const lightBtn = document.getElementById("lightBtn");
+const blowBtn = document.getElementById("blowBtn");
+const candle = document.getElementById("candle");
+
 /* LOADING */
-const loader = setInterval(() => {
+let percent = 1;
+const loader = setInterval(()=>{
   percent++;
   loadText.innerText = "Loading your cuteness " + percent + "%";
-  bar.style.width = (percent / 222) * 100 + "%";
+  bar.style.width = (percent/222)*100 + "%";
 
-  if (percent >= 222) {
+  if(percent >= 222){
     clearInterval(loader);
     startBtn.classList.remove("hidden");
   }
-}, 30);
+},30);
 
-/* BUTTON WORKS — GUARANTEED */
-startBtn.onclick = function () {
-  loadingScreen.classList.add("hidden");
+/* START */
+startBtn.onclick = ()=>{
+  loading.classList.add("hidden");
   cakeScreen.classList.remove("hidden");
 };
 
 /* VIBRATION */
 function vibrate(ms){
-  if (navigator.vibrate) navigator.vibrate(ms);
+  if(navigator.vibrate) navigator.vibrate(ms);
 }
 
-/* CANDLE */
-function blowCandle(){
-  document.getElementById("candle").innerText = "💨";
-  vibrate(200);
-}
+/* DECORATE CAKE */
+decorateBtn.onclick = ()=>{
+  cakeImg.src = "cake_decorated.png";
+  decorateBtn.classList.add("hidden");
+  lightBtn.classList.remove("hidden");
+  vibrate(100);
+};
+
+/* LIGHT CANDLE */
+lightBtn.onclick = ()=>{
+  candle.classList.remove("hidden");
+  lightBtn.classList.add("hidden");
+  blowBtn.classList.remove("hidden");
+  vibrate(150);
+};
+
+/* BLOW CANDLE */
+blowBtn.onclick = ()=>{
+  candle.innerText = "💨";
+  vibrate(300);
+};
 </script>
 
 </body>
 </html>
+
 
 
  
