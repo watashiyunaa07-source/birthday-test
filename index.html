@@ -51,33 +51,33 @@ button {
 }
 
 /* CARDS */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  padding: 30px;
-}
-
 .card {
-  background: white;
-  border-radius: 25px;
-  padding: 70px 20px;
-  font-size: 30px;
-  cursor: pointer;
-  min-height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
+  perspective: 1000px;
 }
 
-.card:hover {
-  transform: scale(1.05);
+.card-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
 }
 
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
 }
-.card.flipped {
-  background: #ffb3d9;
+
+.card-front, .card-back {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+let cardChosen = false;
+
+function flipCard(card){
+  if(cardChosen) return;
+  cardChosen = true;
+  card.classList.add("flipped");
 }
 
 /* CAKE */
@@ -94,7 +94,6 @@ button {
   top: -55px;
   width: 28px;
 }
-
 /* BALLOONS */
 .balloon {
   font-size: 50px;
@@ -196,7 +195,7 @@ let load = setInterval(()=>{
     document.getElementById("loading").classList.add("hidden");
     document.getElementById("intro").classList.remove("hidden");
   }
-},30);
+},15);
 
 function showCards(){
   document.getElementById("intro").classList.add("hidden");
@@ -213,9 +212,15 @@ function showCake(){
   document.getElementById("cards").classList.add("hidden");
   document.getElementById("cake").classList.remove("hidden");
 }
-
-function decorate(){
-  document.getElementById("cakeImg").src = "cake_decorated.png";
+function decorateCake(){
+  cake.src = "cake_decorated.png";
+  document.getElementById("decorateBtn").style.display="none";
+  document.getElementById("candleBtn").style.display="block";
+}
+function addCandle(){
+  document.getElementById("candle").style.display="block";
+  document.getElementById("candleBtn").style.display="none";
+  document.getElementById("blowBtn").style.display="block";
 }
 
 function blow(){
@@ -224,12 +229,12 @@ function blow(){
   document.getElementById("cut").classList.remove("hidden");
 }
 
-function afterCut(){
-  document.getElementById("cut").classList.add("hidden");
-  document.getElementById("balloons").classList.remove("hidden");
+function finishCut(){
+  next("sliceScreen");
 }
+<div style="font-size:120px">🍰</div>
 
-let balloonStep = 0;
+ let balloonStep = 0;
 
 function popBalloon(step){
   const text = document.getElementById("amazing");
