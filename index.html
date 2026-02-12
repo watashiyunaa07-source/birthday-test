@@ -46,7 +46,7 @@ button {
 }
 #bar {
   height: 100%;
-  width: 1%;
+  width: 2%;
   background: #ff6fa5;
 }
 
@@ -116,17 +116,20 @@ function flipCard(card){
 
 <!-- LOADING -->
 <div id="loading">
-  <h2>Loading your cuteness… <span id="percent">1%</span></h2>
-  <div id="progress"><div id="bar"></div></div>
+  <p id="loadText">Loading your cuteness 1%</p>
+
+  <div style="width:300px; height:16px; background:#ffd6e8; border-radius:10px; overflow:hidden;">
+    <div id="bar" style="height:100%; width:0%; background:#ff69b4;"></div>
+  </div>
+
+  <button id="startBtn" style="display:none;" onclick="nextScreen()">
+    Start 🎀
+  </button>
+</div>
+<div id="intro" style="display:none;">
+  <h2>20 years ago a dollkeeper was born</h2>
 </div>
 
-<!-- INTRO -->
-<div id="loading">
-  <p id="loadText">Loading your cuteness 1%</p>
-  <div class="progress">
-    <div id="bar"></div>
-  </div>
-</div>
 
 
 <!-- CARDS -->
@@ -180,90 +183,31 @@ function flipCard(card){
   <h2>💌 Your Final Message</h2>
   <p>HIE BESTIE HAPPY BDAY I  LOB U SM 💖</p>
 </div>
-
 <script>
 let load = 0;
-const bar = document.getElementById("bar");
-const text = document.getElementById("loadText");
 
-const interval = setInterval(() => {
-  load++;
-  bar.style.width = (load / 222) * 100 + "%";
-  text.innerText = "Loading your cuteness " + load + "%";
+window.onload = function () {
+  const bar = document.getElementById("bar");
+  const text = document.getElementById("loadText");
+  const startBtn = document.getElementById("startBtn");
 
-  if (load >= 222) {
-    clearInterval(interval);
-    document.getElementById("startBtn").style.display = "block";
-  }
-}, 15);
+  const interval = setInterval(() => {
+    load++;
+    bar.style.width = (load / 222) * 100 + "%";
+    text.innerText = "Loading your cuteness " + load + "%";
 
-
-function showCards(){
-  document.getElementById("intro").classList.add("hidden");
-  document.getElementById("cards").classList.remove("hidden");
-  document.getElementById("music").play();
+    if (load >= 222) {
+      clearInterval(interval);
+      startBtn.style.display = "block";
+    }
+  }, 15);
+};
+  function nextScreen() {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("intro").style.display = "block";
 }
 
-function flip(el,msg){
-  el.classList.add("flipped");
-  el.innerText = msg;
-}
-
-function showCake(){
-  document.getElementById("cards").classList.add("hidden");
-  document.getElementById("cake").classList.remove("hidden");
-}
-function decorateCake(){
-  cake.src = "cake_decorated.png";
-  document.getElementById("decorateBtn").style.display="none";
-  document.getElementById("candleBtn").style.display="block";
-}
-function addCandle(){
-  document.getElementById("candle").style.display="block";
-  document.getElementById("candleBtn").style.display="none";
-  document.getElementById("blowBtn").style.display="block";
-}
-
-function blow(){
-  document.querySelectorAll(".candle").forEach(c=>c.remove());
-  document.getElementById("cake").classList.add("hidden");
-  document.getElementById("cut").classList.remove("hidden");
-}
-
-function finishCut(){
-  next("sliceScreen");
-}
-<div style="font-size:120px">🍰</div>
-
- let balloonStep = 0;
-
-function popBalloon(step){
-  const text = document.getElementById("amazing");
-
-  if(step === 1){
-    text.innerText = "YOU";
-  }
-  if(step === 2){
-    text.innerText = "YOU ARE";
-  }
-  if(step === 3){
-    text.innerText = "YOU ARE AMAZING";
-    setTimeout(()=>{
-      document.getElementById("balloons").classList.add("hidden");
-      document.getElementById("final").classList.remove("hidden");
-    }, 900);
-  }
-
-  // phone vibration (mobile only)
-  if (navigator.vibrate) navigator.vibrate(100);
-}
-
-
-function showScroll(){
-  document.getElementById("scroll").classList.remove("hidden");
-}
 </script>
-
 </body>
 </html>
 
