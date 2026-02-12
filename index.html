@@ -163,19 +163,21 @@ img {
 </div>
 
 <script>
-window.onload = () => {
-  let percent = 1;
-  const loadText = document.getElementById("load");
-  const nextBtn = document.getElementById("nextBtn");
+let percent = 1;
+const loadText = document.getElementById("load");
+const nextBtn = document.getElementById("nextBtn");
 
-  const loader = setInterval(() => {
-    percent += 1;
-    loadText.innerText = percent + "%";
+nextBtn.style.display = "none";
 
-    if (percent >= 222) {
-      clearInterval(loader);
-      nextBtn.style.display = "inline-block";
-    }
-  }, 30);
-};
+const loader = setInterval(() => {
+  percent++;
+  loadText.innerText = "Loading your cuteness " + percent + "%";
+
+  if (percent >= 222) {
+    clearInterval(loader);
+    nextBtn.style.display = "inline-block";
+  }
+}, 50);
+</script>
+
 
