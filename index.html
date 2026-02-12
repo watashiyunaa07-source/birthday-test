@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Birthday</title>
+<title>Birthday Surprise</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -11,6 +11,7 @@ body{
   background:#ffd6e8;
   font-family:Arial, sans-serif;
   text-align:center;
+  overflow:hidden;
 }
 
 .screen{
@@ -19,59 +20,187 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  gap:16px;
+  transition:opacity 0.6s ease;
 }
 
-.hidden{
-  display:none;
+.hidden{ display:none; }
+
+/* LOADING */
+#barBox{
+  width:240px;
+  height:14px;
+  background:#ffe6f1;
+  border-radius:20px;
+  overflow:hidden;
+}
+#bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff69b4,#ffb6d9);
 }
 
+/* BUTTON */
 button{
   padding:12px 24px;
   border:none;
   border-radius:20px;
   background:#ff5fa2;
   color:white;
-  font-size:18px;
+  font-size:16px;
+}
+
+/* CAKE */
+#cakeBox{
+  position:relative;
+}
+#cake{
+  width:240px;
+}
+
+/* CANDLE (NO EMOJI) */
+#candle{
+  width:14px;
+  height:60px;
+  background:#ffcc66;
+  position:absolute;
+  top:-60px;
+  left:50%;
+  transform:translateX(-50%);
+  border-radius:6px;
+}
+#flame{
+  width:14px;
+  height:14px;
+  background:#ff884d;
+  border-radius:50%;
+  margin:auto;
+}
+
+/* CUT LINE */
+#cutHint{
+  font-size:14px;
+  opacity:0.8;
+}
+
+/* BIG CAKE EMOJI */
+#bigCake{
+  font-size:120px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- SCREEN 1 -->
-<div id="screen1" class="screen">
-  <h2 id="text">Loading your cuteness 1%</h2>
-  <button id="start" class="hidden" onclick="goNext()">Start 🎁</button>
+<!-- AUDIO (SAFE – PLAYS AFTER USER ACTION) -->
+<audio id="music" src="music.mp3" loop></audio>
+
+<!-- LOADING -->
+<div id="loading" class="screen">
+  <h3 id="loadText">Loading your cuteness 1%</h3>
+  <div id="barBox"><div id="bar"></div></div>
+  <button id="startBtn" class="hidden" onclick="goCake()">Start 🎁</button>
 </div>
 
-<!-- SCREEN 2 -->
-<div id="screen2" class="screen hidden">
-  <h2>IT WORKED 🎉</h2>
-  <img src="cake_plain.png" width="200">
+<!-- CAKE -->
+<div id="cakeScreen" class="screen hidden">
+  <h3 id="stepText">Decorate the cake</h3>
+
+  <div id="cakeBox">
+    <div id="candle" class="hidden">
+      <div id="flame"></div>
+    </div>
+    <img src="cake_plain.png" id="cake">
+  </div>
+
+  <button id="decorateBtn">Decorate</button>
+  <button id="lightBtn" class="hidden">Light candle</button>
+  <button id="blowBtn" class="hidden">Blow candle</button>
+
+  <div id="cutHint" class="hidden">Swipe across cake to cut</div>
+</div>
+
+<!-- CUT RESULT -->
+<div id="cutScreen" class="screen hidden">
+  <div id="bigCake">🍰</div>
+  <h3>You are so amazing 💗</h3>
 </div>
 
 <script>
-let p = 1;
-const text = document.getElementById("text");
-const btn = document.getElementById("start");
+/* LOADING */
+let p=1;
+const loadText=document.getElementById("loadText");
+const bar=document.getElementById("bar");
+const startBtn=document.getElementById("startBtn");
 
-const timer = setInterval(()=>{
+const timer=setInterval(()=>{
   p++;
-  text.innerText = "Loading your cuteness " + p + "%";
-  if(p >= 50){
+  loadText.innerText="Loading your cuteness "+p+"%";
+  bar.style.width=(p/222)*100+"%";
+  if(p>=222){
     clearInterval(timer);
-    btn.classList.remove("hidden");
+    startBtn.classList.remove("hidden");
   }
-}, 50);
+},40);
 
-function goNext(){
-  document.getElementById("screen1").classList.add("hidden");
-  document.getElementById("screen2").classList.remove("hidden");
+/* SCREENS */
+function goCake(){
+  document.getElementById("loading").classList.add("hidden");
+  document.getElementById("cakeScreen").classList.remove("hidden");
+  document.getElementById("music").play();
 }
+
+/* VIBRATION */
+function vibrate(ms){
+  if(navigator.vibrate) navigator.vibrate(ms);
+}
+
+/* STEPS */
+const cake=document.getElementById("cake");
+const candle=document.getElementById("candle");
+const decorateBtn=document.getElementById("decorateBtn");
+const lightBtn=document.getElementById("lightBtn");
+const blowBtn=document.getElementById("blowBtn");
+const cutHint=document.getElementById("cutHint");
+const stepText=document.getElementById("stepText");
+
+decorateBtn.onclick=()=>{
+  cake.src="cake_decorated.png";
+  decorateBtn.classList.add("hidden");
+  lightBtn.classList.remove("hidden");
+  vibrate(100);
+};
+
+lightBtn.onclick=()=>{
+  candle.classList.remove("hidden");
+  lightBtn.classList.add("hidden");
+  blowBtn.classList.remove("hidden");
+  stepText.innerText="Make a wish";
+};
+
+blowBtn.onclick=()=>{
+  candle.style.display="none";
+  blowBtn.classList.add("hidden");
+  cutHint.classList.remove("hidden");
+  stepText.innerText="Cut the cake";
+  vibrate(300);
+};
+
+/* SWIPE TO CUT */
+let startX=null;
+cake.addEventListener("pointerdown",e=>startX=e.clientX);
+cake.addEventListener("pointerup",e=>{
+  if(startX && Math.abs(e.clientX-startX)>80){
+    vibrate([100,50,100]);
+    document.getElementById("cakeScreen").classList.add("hidden");
+    document.getElementById("cutScreen").classList.remove("hidden");
+  }
+});
 </script>
 
 </body>
 </html>
+
 
 
 
