@@ -14,6 +14,18 @@ body{
   overflow:hidden;
 }
 
+/* ✨ sparkles */
+.sparkle{
+  position:fixed;
+  font-size:18px;
+  animation:float 6s linear infinite;
+  pointer-events:none;
+}
+@keyframes float{
+  from{transform:translateY(100vh) rotate(0deg);opacity:1}
+  to{transform:translateY(-10vh) rotate(360deg);opacity:0}
+}
+
 .page{display:none;min-height:100vh;padding:25px;}
 .show{display:block;}
 
@@ -30,33 +42,24 @@ button{
 /* loading */
 #bar{width:80%;height:25px;background:white;border-radius:20px;margin:40px auto;overflow:hidden;}
 #progress{height:100%;width:0;background:#ff7eb9;}
-#percent{font-size:18px;margin-top:10px}
+#percent{margin-top:10px}
 
 /* cards */
 .cards{display:flex;gap:20px;justify-content:center;}
-.card{
-  width:110px;height:150px;
-  perspective:1000px;
-}
-.inner{
-  width:100%;height:100%;
-  transition:0.7s;
-  transform-style:preserve-3d;
-}
+.card{width:110px;height:150px;perspective:1000px;}
+.inner{width:100%;height:100%;transition:0.7s;transform-style:preserve-3d;}
 .card.flip .inner{transform:rotateY(180deg);}
 .front,.back{
-  position:absolute;
-  width:100%;height:100%;
-  border-radius:15px;
+  position:absolute;width:100%;height:100%;
+  border-radius:15px;background:white;
   display:flex;align-items:center;justify-content:center;
-  background:white;font-size:28px;
   backface-visibility:hidden;
 }
 .back{transform:rotateY(180deg);font-size:13px;padding:10px}
 
 /* cake */
-#cake{width:230px;margin-top:20px}
-.slice{width:320px}
+#cake{width:240px}
+.slice{width:340px}
 
 /* confetti */
 .confetti{
@@ -66,24 +69,18 @@ button{
 }
 @keyframes fall{
   from{transform:translateY(-100px)}
-  to{transform:translateY(500px)}
+  to{transform:translateY(600px)}
 }
 
 /* balloons */
-.balloon{
-  width:90px;margin:10px;
-}
+.balloon{width:90px;margin:10px}
 
 /* scroll */
-.scrollWrap{
-  position:relative;
-  width:320px;
-  margin:auto;
-}
-.scrollWrap img{width:100%;}
+.scrollWrap{position:relative;width:320px;margin:auto}
+.scrollWrap img{width:100%}
 .scrollText{
   position:absolute;
-  top:30%;left:50%;
+  top:32%;left:50%;
   transform:translate(-50%,-50%);
   width:80%;
   font-size:14px;
@@ -93,7 +90,7 @@ button{
 
 <body>
 
-<!-- 🎵 music -->
+<!-- music -->
 <audio id="music" loop>
   <source src="birthday.mp3">
 </audio>
@@ -112,61 +109,35 @@ button{
   <button onclick="next(3)">Next ➜</button>
 </div>
 
-<!-- PAGE 3 cards -->
+<!-- PAGE 3 -->
 <div id="p3" class="page">
   <h2>Pick ONE card</h2>
   <div class="cards">
-
-    <div class="card" onclick="pick(this)">
-      <div class="inner">
-        <div class="front">♠️</div>
-        <div class="back">You are my strongest support</div>
-      </div>
-    </div>
-
-    <div class="card" onclick="pick(this)">
-      <div class="inner">
-        <div class="front">♦️</div>
-        <div class="back">Your smile lights my world</div>
-      </div>
-    </div>
-
-    <div class="card" onclick="pick(this)">
-      <div class="inner">
-        <div class="front">♣️</div>
-        <div class="back">Life is lucky with you</div>
-      </div>
-    </div>
-
-    <div class="card" onclick="pick(this)">
-      <div class="inner">
-        <div class="front">❤️</div>
-        <div class="back">You have the kindest heart ever</div>
-      </div>
-    </div>
-
+    <div class="card" onclick="pick(this)"><div class="inner"><div class="front">♠️</div><div class="back">You are my strongest support</div></div></div>
+    <div class="card" onclick="pick(this)"><div class="inner"><div class="front">♦️</div><div class="back">Your smile lights my world</div></div></div>
+    <div class="card" onclick="pick(this)"><div class="inner"><div class="front">♣️</div><div class="back">Life is lucky with you</div></div></div>
+    <div class="card" onclick="pick(this)"><div class="inner"><div class="front">❤️</div><div class="back">Kindest heart ever</div></div></div>
   </div>
-
   <button id="cakeBtn" style="display:none" onclick="next(4)">Go to Cake 🎂</button>
 </div>
 
-<!-- PAGE 4 cake -->
+<!-- PAGE 4 -->
 <div id="p4" class="page">
   <img id="cake" src="cake_plain.png">
   <br>
-  <button id="blowBtn" onclick="blow()">Blow Candle 🕯</button>
-  <button id="cutBtn" style="display:none">Swipe cake to cut ➜</button>
+  <button id="blowBtn">Blow Candle 🕯</button>
+  <button id="cutBtn" style="display:none">Swipe cake ➜</button>
   <div id="confettiBox"></div>
 </div>
 
-<!-- PAGE 5 slice -->
+<!-- PAGE 5 -->
 <div id="p5" class="page">
   <img src="cake_plain.png" class="slice">
   <h2>Big slice just for you 💕</h2>
   <button onclick="next(6)">Next ➜</button>
 </div>
 
-<!-- PAGE 6 balloons -->
+<!-- PAGE 6 -->
 <div id="p6" class="page">
   <h2>Pop balloons 🎈</h2>
   <div id="balloons"></div>
@@ -174,16 +145,15 @@ button{
   <button id="finalBtn" style="display:none" onclick="next(7)">Final Message 💌</button>
 </div>
 
-<!-- PAGE 7 scroll -->
+<!-- PAGE 7 -->
 <div id="p7" class="page">
   <div class="scrollWrap">
     <img src="scroll.png">
     <div class="scrollText">
       Happy Birthday my favorite person 💖<br><br>
-      Thank you for being my happiness,<br>
-      my comfort and my sunshine.<br>
-      You mean the world to me.<br><br>
-      Stay cute forever ✨
+      You are my happiness, my comfort,<br>
+      and my forever favorite human.<br><br>
+      Stay cute always ✨
     </div>
   </div>
 </div>
@@ -191,6 +161,15 @@ button{
 <script>
 let current=1;
 
+const progress=document.getElementById("progress");
+const percent=document.getElementById("percent");
+const music=document.getElementById("music");
+const cake=document.getElementById("cake");
+const blowBtn=document.getElementById("blowBtn");
+const cutBtn=document.getElementById("cutBtn");
+const confettiBox=document.getElementById("confettiBox");
+
+/* navigation */
 function next(n){
   document.getElementById("p"+current).classList.remove("show");
   document.getElementById("p"+n).classList.add("show");
@@ -198,7 +177,7 @@ function next(n){
   music.play();
 }
 
-/* loading to 222% */
+/* loading fix */
 let w=0;
 let load=setInterval(()=>{
   w+=2;
@@ -206,6 +185,16 @@ let load=setInterval(()=>{
   percent.innerText=w+"%";
   if(w>=222){clearInterval(load);next(2);}
 },25);
+
+/* sparkles */
+setInterval(()=>{
+  let s=document.createElement("div");
+  s.className="sparkle";
+  s.innerHTML="✨";
+  s.style.left=Math.random()*100+"vw";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),6000);
+},300);
 
 /* one card only */
 let chosen=false;
@@ -217,20 +206,20 @@ function pick(card){
 }
 
 /* blow candle */
-function blow(){
+blowBtn.onclick=()=>{
   blowBtn.style.display="none";
   cutBtn.style.display="inline-block";
 
-  for(let i=0;i<30;i++){
+  for(let i=0;i<25;i++){
     let img=document.createElement("img");
     img.src="confetti.png";
     img.className="confetti";
     img.style.left=Math.random()*100+"%";
     confettiBox.appendChild(img);
   }
-}
+};
 
-/* swipe to cut */
+/* swipe cake */
 let startX=0;
 cake.onpointerdown=e=>startX=e.clientX;
 cake.onpointerup=e=>{
@@ -238,12 +227,11 @@ cake.onpointerup=e=>{
     if(navigator.vibrate) navigator.vibrate(300);
     next(5);
   }
-}
+};
 
-/* balloons only 4 */
+/* balloons */
 const words=["YOU ","ARE ","AMA ","ZING!"];
 let i=0;
-
 for(let j=0;j<4;j++){
   let img=document.createElement("img");
   img.src="ballon.png";
@@ -258,4 +246,4 @@ for(let j=0;j<4;j++){
 </script>
 
 </body>
-</html><!DOCTYPE html>
+</html>
