@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
 <style>
@@ -17,15 +17,16 @@ body{
 /* ✨ sparkles */
 .sparkle{
   position:fixed;
-  font-size:18px;
+  font-size:16px;
   animation:float 6s linear infinite;
   pointer-events:none;
 }
 @keyframes float{
-  from{transform:translateY(100vh) rotate(0deg);opacity:1}
-  to{transform:translateY(-10vh) rotate(360deg);opacity:0}
+  from{transform:translateY(100vh);opacity:1}
+  to{transform:translateY(-10vh);opacity:0}
 }
 
+/* pages */
 .page{display:none;min-height:100vh;padding:25px;}
 .show{display:block;}
 
@@ -42,11 +43,10 @@ button{
 /* loading */
 #bar{width:80%;height:25px;background:white;border-radius:20px;margin:40px auto;overflow:hidden;}
 #progress{height:100%;width:0;background:#ff7eb9;}
-#percent{margin-top:10px}
 
 /* cards */
-.cards{display:flex;gap:20px;justify-content:center;}
-.card{width:110px;height:150px;perspective:1000px;}
+.cards{display:flex;gap:18px;justify-content:center;}
+.card{width:100px;height:140px;perspective:1000px;}
 .inner{width:100%;height:100%;transition:0.7s;transform-style:preserve-3d;}
 .card.flip .inner{transform:rotateY(180deg);}
 .front,.back{
@@ -55,21 +55,24 @@ button{
   display:flex;align-items:center;justify-content:center;
   backface-visibility:hidden;
 }
-.back{transform:rotateY(180deg);font-size:13px;padding:10px}
+.back{transform:rotateY(180deg);font-size:12px;padding:8px}
 
 /* cake */
-#cake{width:240px}
-.slice{width:340px}
+#cake{
+  width:240px;
+  touch-action:none;
+}
+.slice{width:350px}
 
-/* confetti */
+/* 🎊 CUTER CONFETTI */
 .confetti{
   position:absolute;
-  width:40px;
-  animation:fall 2s linear forwards;
+  width:20px;
+  animation:confettiFall 2.5s ease-out forwards;
 }
-@keyframes fall{
-  from{transform:translateY(-100px)}
-  to{transform:translateY(600px)}
+@keyframes confettiFall{
+  0%{transform:translate(0,0) rotate(0)}
+  100%{transform:translate(var(--x),600px) rotate(720deg);opacity:0}
 }
 
 /* balloons */
@@ -90,7 +93,6 @@ button{
 
 <body>
 
-<!-- music -->
 <audio id="music" loop>
   <source src="birthday.mp3">
 </audio>
@@ -126,7 +128,6 @@ button{
   <img id="cake" src="cake_plain.png">
   <br>
   <button id="blowBtn">Blow Candle 🕯</button>
-  <button id="cutBtn" style="display:none">Swipe cake ➜</button>
   <div id="confettiBox"></div>
 </div>
 
@@ -151,8 +152,8 @@ button{
     <img src="scroll.png">
     <div class="scrollText">
       Happy Birthday my favorite person 💖<br><br>
-      You are my happiness, my comfort,<br>
-      and my forever favorite human.<br><br>
+      You are my happiness,<br>
+      my comfort & my forever smile.<br><br>
       Stay cute always ✨
     </div>
   </div>
@@ -160,13 +161,10 @@ button{
 
 <script>
 let current=1;
-
 const progress=document.getElementById("progress");
 const percent=document.getElementById("percent");
 const music=document.getElementById("music");
 const cake=document.getElementById("cake");
-const blowBtn=document.getElementById("blowBtn");
-const cutBtn=document.getElementById("cutBtn");
 const confettiBox=document.getElementById("confettiBox");
 
 /* navigation */
@@ -177,7 +175,7 @@ function next(n){
   music.play();
 }
 
-/* loading fix */
+/* loading 0-222 */
 let w=0;
 let load=setInterval(()=>{
   w+=2;
@@ -196,7 +194,7 @@ setInterval(()=>{
   setTimeout(()=>s.remove(),6000);
 },300);
 
-/* one card only */
+/* one card */
 let chosen=false;
 function pick(card){
   if(chosen) return;
@@ -205,43 +203,51 @@ function pick(card){
   cakeBtn.style.display="inline-block";
 }
 
-/* blow candle */
-blowBtn.onclick=()=>{
-  blowBtn.style.display="none";
-  cutBtn.style.display="inline-block";
-
-  for(let i=0;i<25;i++){
+/* CUTER CONFETTI BURST */
+document.getElementById("blowBtn").onclick=()=>{
+  for(let i=0;i<40;i++){
     let img=document.createElement("img");
     img.src="confetti.png";
     img.className="confetti";
-    img.style.left=Math.random()*100+"%";
+    img.style.left="50%";
+    img.style.top="30%";
+    img.style.setProperty("--x",(Math.random()*400-200)+"px");
     confettiBox.appendChild(img);
   }
 };
 
-/* swipe cake */
+/* FIXED swipe (touch + mouse) */
 let startX=0;
-cake.onpointerdown=e=>startX=e.clientX;
-cake.onpointerup=e=>{
-  if(e.clientX-startX>80){
+
+cake.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+cake.addEventListener("touchend",e=>{
+  if(e.changedTouches[0].clientX-startX>60){
     if(navigator.vibrate) navigator.vibrate(300);
     next(5);
   }
-};
+});
+
+cake.addEventListener("mousedown",e=>startX=e.clientX);
+cake.addEventListener("mouseup",e=>{
+  if(e.clientX-startX>60){
+    if(navigator.vibrate) navigator.vibrate(300);
+    next(5);
+  }
+});
 
 /* balloons */
 const words=["YOU ","ARE ","AMA ","ZING!"];
 let i=0;
 for(let j=0;j<4;j++){
-  let img=document.createElement("img");
-  img.src="ballon.png";
-  img.className="balloon";
-  img.onclick=()=>{
-    img.style.visibility="hidden";
+  let b=document.createElement("img");
+  b.src="ballon.png";
+  b.className="balloon";
+  b.onclick=()=>{
+    b.style.visibility="hidden";
     msg.innerHTML+=words[i++];
     if(i===4) finalBtn.style.display="inline-block";
   }
-  balloons.appendChild(img);
+  balloons.appendChild(b);
 }
 </script>
 
