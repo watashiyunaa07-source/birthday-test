@@ -197,13 +197,21 @@ let load=setInterval(()=>{
 
 /* sparkles */
 setInterval(()=>{
-  let s=document.createElement("div");
-  s.className="sparkle";
-  s.innerHTML="✨";
-  s.style.left=Math.random()*100+"vw";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),6000);
-},300);
+  let sparkleOn=false;
+
+function startSparkles(){
+  if(sparkleOn) return;
+  sparkleOn=true;
+  setInterval(()=>{
+    let s=document.createElement("div");
+    s.className="sparkle";
+    s.innerHTML="✨";
+    s.style.left=Math.random()*100+"vw";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),6000);
+  },300);
+}
+
 
 /* one card */
 let chosen=false;
@@ -232,21 +240,18 @@ document.getElementById("blowBtn").onclick=()=>{
 /* FIXED swipe (touch + mouse) */
 let startX=0;
 
-cake.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-cake.addEventListener("touchend",e=>{
-  if(e.changedTouches[0].clientX-startX>60){
+cake.addEventListener("pointerdown",e=>{
+  startX=e.clientX;
+});
+
+cake.addEventListener("pointerup",e=>{
+  if(e.clientX-startX>40){
     if(navigator.vibrate) navigator.vibrate(300);
-    next(6);
+    startSparkles();
+     next(6);   // go to balloons
   }
 });
 
-cake.addEventListener("mousedown",e=>startX=e.clientX);
-cake.addEventListener("mouseup",e=>{
-  if(e.clientX-startX>60){
-    if(navigator.vibrate) navigator.vibrate(300);
-    next(6);
-  }
-});
 
 /* balloons */
 const words=["you ","are ","so ","cool!"];
