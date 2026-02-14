@@ -96,6 +96,10 @@ button{
 <audio id="music" loop>
   <source src="birthday.mp3">
 </audio>
+<audio id="finalMusic" loop>
+  <source src="sailor.mp3">
+</audio>
+
 
 <!-- PAGE 1 -->
 <div id="p1" class="page show">
@@ -172,8 +176,13 @@ function next(n){
   document.getElementById("p"+current).classList.remove("show");
   document.getElementById("p"+n).classList.add("show");
   current=n;
+
   music.play();
-  if(n==7){ document.getElementById("finalMusic").play(); }
+
+  if(n==7){
+    music.pause();
+    document.getElementById("finalMusic").play();
+  }
 }
 
 /* loading 0-222 */
@@ -251,7 +260,5 @@ for(let j=0;j<4;j++){
   balloons.appendChild(b);
 }
 </script>
-<audio id="finalMusic" src="sailor.mp3"></audio>
-
 </body>
 </html>
