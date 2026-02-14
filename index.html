@@ -103,7 +103,7 @@ button{
 
 <!-- PAGE 1 -->
 <div id="p1" class="page show">
-  <h2>Measuring your cuteness 💗</h2>
+  <h2>Measuring your cuteness... 💗</h2>
   <div id="bar"><div id="progress"></div></div>
   <div id="percent">0%</div>
 </div>
@@ -132,8 +132,9 @@ button{
   <img id="cake" src="cake_plain.png">
   <br>
   <button id="blowBtn">Blow Candle 🕯</button>
+  <button id="cutBtn" style="display:none">Swipe to cut the cake ➜</button>
   <div id="confettiBox"></div>
-</div>
+
 
 <!-- PAGE 5 -->
 <div id="p5" class="page">
@@ -224,6 +225,8 @@ document.getElementById("blowBtn").onclick=()=>{
     img.style.setProperty("--x",(Math.random()*400-200)+"px");
     confettiBox.appendChild(img);
   }
+
+  cutBtn.style.display="inline-block";   // 👈 show cut button
 };
 
 /* FIXED swipe (touch + mouse) */
@@ -233,7 +236,7 @@ cake.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
 cake.addEventListener("touchend",e=>{
   if(e.changedTouches[0].clientX-startX>60){
     if(navigator.vibrate) navigator.vibrate(300);
-    next(5);
+    next(6);
   }
 });
 
@@ -241,7 +244,7 @@ cake.addEventListener("mousedown",e=>startX=e.clientX);
 cake.addEventListener("mouseup",e=>{
   if(e.clientX-startX>60){
     if(navigator.vibrate) navigator.vibrate(300);
-    next(5);
+    next(6);
   }
 });
 
