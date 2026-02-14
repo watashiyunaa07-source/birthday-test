@@ -107,7 +107,7 @@ button{
 <!-- PAGE 2 -->
 <div id="p2" class="page">
   <img src="rabbit.png" width="220">
-  <h2>✨ A robloxain  was born 14 years ago  years ago ✨</h2>
+  <h2>✨ A dollkeeper  was born 20 years ago  years ago ✨</h2>
   <button onclick="next(3)">Next ➜</button>
 </div>
 
@@ -173,6 +173,7 @@ function next(n){
   document.getElementById("p"+n).classList.add("show");
   current=n;
   music.play();
+  if(n==7){ document.getElementById("finalMusic").play(); }
 }
 
 /* loading 0-222 */
@@ -236,7 +237,7 @@ cake.addEventListener("mouseup",e=>{
 });
 
 /* balloons */
-const words=["august ","6th ","20 ","11!"];
+const words=["you ","are ","so ","cool!"];
 let i=0;
 for(let j=0;j<4;j++){
   let b=document.createElement("img");
@@ -250,6 +251,7 @@ for(let j=0;j<4;j++){
   balloons.appendChild(b);
 }
 </script>
+<audio id="finalMusic" src="sailor.mp3"></audio>
 
 </body>
 </html>
