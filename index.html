@@ -59,10 +59,10 @@ button{
 
 /* cake */
 #cake{
-  width:240px;
+  width:320px;
   touch-action:none;
 }
-.slice{width:350px}
+.slice{width:450px}
 
 /* 🎊 CUTER CONFETTI */
 .confetti{
@@ -79,7 +79,7 @@ button{
 .balloon{width:90px;margin:10px}
 
 /* scroll */
-.scrollWrap{position:relative;width:320px;margin:auto}
+.scrollWrap{position:relative;width:420px;margin:auto}
 .scrollWrap img{width:100%}
 .scrollText{
   position:absolute;
@@ -167,7 +167,7 @@ button{
 </div>
 
 <script>
-function startSparkles(){}
+
 let current=1;
 const progress=document.getElementById("progress");
 const percent=document.getElementById("percent");
@@ -224,7 +224,10 @@ function pick(card){
 }
 
 /* CUTER CONFETTI BURST */
-document.getElementById("blowBtn").onclick=()=>{
+  document.getElementById("blowBtn").onclick=()=>{
+
+  music.play();  // birthday song
+
   for(let i=0;i<40;i++){
     let img=document.createElement("img");
     img.src="confetti.png";
@@ -235,21 +238,21 @@ document.getElementById("blowBtn").onclick=()=>{
     confettiBox.appendChild(img);
   }
 
-  cutBtn.style.display="inline-block";   // 👈 show cut button
+  cutBtn.style.display="inline-block";
 };
+
 
 /* FIXED swipe (touch + mouse) */
 let startX=0;
 
-cake.addEventListener("pointerdown",e=>{
-  startX=e.clientX;
-});
-
 cake.addEventListener("pointerup",e=>{
   if(e.clientX-startX>40){
+
     if(navigator.vibrate) navigator.vibrate(300);
-    startSparkles();
-     next(6);   // go to balloons
+
+    startSparkles();   // ✨ sparkle when cake cut
+
+    setTimeout(()=>next(6),1500);
   }
 });
 
