@@ -199,12 +199,11 @@ let load=setInterval(()=>{
 },25);
 
 /* sparkles */
-setInterval(()=>{
-  let sparkleOn=false;
-
+let sparkleOn=false;
 function startSparkles(){
   if(sparkleOn) return;
   sparkleOn=true;
+
   setInterval(()=>{
     let s=document.createElement("div");
     s.className="sparkle";
@@ -214,7 +213,6 @@ function startSparkles(){
     setTimeout(()=>s.remove(),6000);
   },300);
 }
-
 
 /* one card */
 let chosen=false;
