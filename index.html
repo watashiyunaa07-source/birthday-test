@@ -77,7 +77,10 @@ button{
 
 /* balloons */
 .balloon{width:90px;margin:10px}
-
+@keyframes floatUp{
+  from{transform:translateY(0)}
+  to{transform:translateY(-120vh)}
+}
 /* scroll */
 .scrollWrap{position:relative;width:420px;margin:auto}
 .scrollWrap img{width:100%}
@@ -131,8 +134,7 @@ button{
 <div id="p4" class="page">
   <img id="cake" src="cake_plain.png">
   <br>
-  <button id="blowBtn">Blow Candle 🕯</button>
-  <button id="cutBtn" style="display:none">Swipe to cut the cake ➜</button>
+ <button id="decorateBtn">Decorate 🎀</button>
   <div id="confettiBox"></div>
   </div>
 
@@ -270,6 +272,30 @@ for(let j=0;j<4;j++){
     if(i===4) finalBtn.style.display="inline-block";
   }
   balloons.appendChild(b);
+}
+const decorateBtn = document.getElementById("decorateBtn");
+
+decorateBtn.onclick = () => {
+  startSparkles();
+  makeBalloons();
+  decorateBtn.style.display="none";
+};
+function makeBalloons(){
+  const container = document.body;
+
+  for(let i=0;i<12;i++){
+    let b=document.createElement("img");
+    b.src="balloon.png";
+    b.className="balloon";
+
+    b.style.position="fixed";
+    b.style.left=Math.random()*90+"vw";
+    b.style.bottom="-120px";
+
+    b.style.animation="floatUp 6s linear forwards";
+
+    container.appendChild(b);
+  }
 }
 </script>
 </body>
