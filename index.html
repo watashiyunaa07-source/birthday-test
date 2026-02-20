@@ -87,10 +87,23 @@ progress::-webkit-progress-value{background:repeating-linear-gradient(45deg,#ff4
 </div>
 
 <script>
+const loading=document.getElementById('loading');
+const cards=document.getElementById('cards');
+const cake=document.getElementById('cake');
+const balloons=document.getElementById('balloons');
+const final=document.getElementById('final');
+const cakeBtn=document.getElementById('cakeBtn');
+const decorateBtn=document.getElementById('decorateBtn');
+const cakeBox=document.getElementById('cakeBox');
+const cakeOverlay=document.getElementById('cakeOverlay');
+const secret=document.getElementById('secret');
+const finalBtn=document.getElementById('finalBtn');
+const music=document.getElementById('music');
+
 /* LOADING */
 let val=0;let interval=setInterval(()=>{val+=5;bar.value=val;percent.innerText=val+'%';if(val>=222){clearInterval(interval);born.classList.remove('hidden');document.querySelector('#loading button').classList.remove('hidden');}},90);
 
-function showCards(){loading.classList.add('hidden');cards.classList.remove('hidden');music.play();}
+function showCards(){loading.classList.add('hidden');cards.classList.remove('hidden');music.play().catch(()=>{});} // music fix
 
 let flipped=0;function flip(c){if(!c.classList.contains('flip')){c.classList.add('flip');flipped++;if(flipped>=1)cakeBtn.classList.remove('hidden');}}
 
@@ -102,13 +115,21 @@ function decorate(){document.body.insertAdjacentHTML('beforeend','<div id="decor
 function enableSwipe(){let startX=0;cakeBox.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
 cakeBox.addEventListener('touchmove',e=>{let dx=e.touches[0].clientX-startX;if(dx>80){cakeOverlay.style.width='0%';cutDone();}});
 }
-function cutDone(){navigator.vibrate?.(200);setTimeout(()=>{alert('slay bestie! 💅');cake.classList.add('hidden');balloons.classList.remove('hidden');},400);}
+function cutDone(){navigator.vibrate?.(200);
+setTimeout(()=>{
+alert('slay bestie! 💅');
+cake.classList.add('hidden');
+balloons.classList.remove('hidden');
+window.scrollTo(0,0);
+},300);
+}
 
 /* BALLOONS SAME MESSAGE */
 let words=['You','are','my','forever bestie 💖'];let popped=[false,false,false,false];
 function pop(i,b){b.style.display='none';popped[i]=true;if(popped.every(x=>x)){secret.innerText=words.join(' ');finalBtn.classList.remove('hidden');}}
 
-function showFinal(){balloons.classList.add('hidden');final.classList.remove('hidden');}
+function showFinal(){balloons.classList.add('hidden');final.classList.remove('hidden');window.scrollTo(0,0);}
 </script>
 </body>
 </html>
+
