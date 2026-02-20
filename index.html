@@ -1,156 +1,97 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Surprise</title>
-
+<title>Happy Birthday 💖</title>
 <style>
-body{
-  margin:0;
-  font-family:'Comic Sans MS',cursive;
-  background:linear-gradient(135deg,#ffd6ec,#ffe9f6);
-  text-align:center;
-  overflow:hidden;
-}
-.page{display:none;min-height:100vh;padding:25px;}
-.show{display:block;}
-button{
-  padding:12px 22px;
-  border:none;
-  border-radius:25px;
-  background:#ff7eb9;
-  color:white;
-  font-size:16px;
-  margin-top:20px;
-}
-#cake{width:300px;}
-.balloon{width:90px;position:fixed;bottom:-120px;animation:floatUp 6s linear forwards;}
-.sparkle{position:fixed;font-size:18px;animation:float 5s linear forwards;pointer-events:none;}
-@keyframes float{from{transform:translateY(0)}to{transform:translateY(-120vh);opacity:0}}
-@keyframes floatUp{from{transform:translateY(0)}to{transform:translateY(-120vh)}}
-.cards{display:flex;gap:18px;justify-content:center;}
-.card{width:100px;height:140px;perspective:1000px;}
-.inner{width:100%;height:100%;transition:0.7s;transform-style:preserve-3d;}
-.card.flip .inner{transform:rotateY(180deg);}
-.front,.back{position:absolute;width:100%;height:100%;border-radius:15px;background:white;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;}
-.back{transform:rotateY(180deg);font-size:12px;padding:8px}
+body{margin:0;font-family:cursive;text-align:center;background:#ffe6f2;overflow-x:hidden}
+.hidden{display:none}
+button{padding:12px 25px;font-size:18px;border:none;border-radius:20px;background:#ff66a3;color:white;margin:15px}
+.card{display:inline-block;width:120px;height:170px;background:white;border-radius:15px;margin:15px;font-size:30px;line-height:170px}
+.big{width:160px;height:220px;font-size:50px}
+#decorateBg{position:fixed;top:0;left:0;width:100%;height:100%;background:url('decorate.png');background-size:cover;opacity:0.3;z-index:-1}
+.balloon{width:120px;margin:15px}
 </style>
 </head>
+
 <body>
+<audio id="music" src="sailor.mp3"></audio>
 
-<audio id="music" loop>
-  <source src="birthday.mp3">
-</audio>
-<audio id="finalMusic" loop>
-  <source src="sailor.mp3">
-</audio>
-
-<div id="p1" class="page show">
-  <h2>Measuring your cuteness... 💗</h2>
-  <div id="percent">0%</div>
+<!-- LOADING -->
+<div id="loading">
+<h2>Measuring your cuteness 🐰💗</h2>
+<img src="rabbit.png" width="150"><br>
+<progress id="bar" value="0" max="222"></progress>
+<p id="percent">0%</p>
+<p class="hidden" id="born">A dollkeeper was born 20 years ago 🎂✨</p>
+<button class="hidden" onclick="showCards()">Next ➡️</button>
 </div>
 
-<div id="p2" class="page">
-  <h2>A cutie was born 💖</h2>
-  <button onclick="next(3)">Next ➜</button>
+<!-- CARDS -->
+<div id="cards" class="hidden">
+<h2>Pick your lucky card 🃏</h2>
+<div class="card big" onclick="flip(this,'Spade: Strong & Loyal 🖤')">♠️</div>
+<div class="card big" onclick="flip(this,'Club: Funny & Smart 🌿')">♣️</div>
+<div class="card big" onclick="flip(this,'Heart: Pure Love 💖')">♥️</div>
+<div class="card big" onclick="flip(this,'Diamond: Rare & Precious 💎')">♦️</div>
+<br><button id="cakeBtn" class="hidden" onclick="showCake()">Go to Cake 🎂</button>
 </div>
 
-<div id="p3" class="page">
-  <h2>Pick ONE card</h2>
-  <div class="cards">
-    <div class="card" onclick="pick(this)"><div class="inner"><div class="front">❤️</div><div class="back">You are my favorite person</div></div></div>
-    <div class="card" onclick="pick(this)"><div class="inner"><div class="front">✨</div><div class="back">Life is happier with you</div></div></div>
-  </div>
-  <button id="cakeBtn" style="display:none" onclick="next(4)">Go to Cake 🎂</button>
+<!-- CAKE -->
+<div id="cake" class="hidden">
+<h2>Make a wish 🕯️</h2>
+<img id="cakeImg" src="cake_plain.png" width="250"><br>
+<button id="decorateBtn" onclick="decorate()">Decorate 🎀</button>
+<button id="cutBtn" class="hidden" onclick="cutCake()">Swipe to cut cake ➡️🎂</button>
 </div>
 
-<div id="p4" class="page">
-  <img id="cake" src="cake_plain.png">
-  <br>
-  <img id="decor" src="decorate.png" style="display:none;width:300px;position:absolute;left:50%;transform:translateX(-50%);top:120px;">
-  <button id="decorateBtn">Decorate 🎀</button>
-  <button id="cutBtn" style="display:none">Swipe cake ➜</button>
+<!-- BALLOONS -->
+<div id="balloons" class="hidden">
+<h2>Pop balloons 🎈</h2>
+<img class="balloon" src="balloon.png" onclick="pop(this,'You')">
+<img class="balloon" src="balloon.png" onclick="pop(this,'Are')">
+<img class="balloon" src="balloon.png" onclick="pop(this,'My')">
+<img class="balloon" src="balloon.png" onclick="pop(this,'Forever Friend 💖')">
+<p id="secret"></p>
+<button id="finalBtn" class="hidden" onclick="showFinal()">Go to Final Message ➡️</button>
 </div>
 
-<div id="p5" class="page">
-  <h2>Pop balloons 🎈</h2>
-  <div id="balloons"></div>
-  <button onclick="next(6)">Final Message 💌</button>
-</div>
-
-<div id="p6" class="page">
-  <h2>Happy Birthday 💖</h2>
+<!-- FINAL -->
+<div id="final" class="hidden">
+<img src="scroll.png" width="90%"><br>
+<h3>Your final message goes here 💌✨</h3>
 </div>
 
 <script>
-let current=1;
-const music=document.getElementById("music");
-const finalMusic=document.getElementById("finalMusic");
-function next(n){
-  document.getElementById("p"+current).classList.remove("show");
-  document.getElementById("p"+n).classList.add("show");
-  current=n;
-  music.play().catch(()=>{});
-  if(n==6){music.pause();finalMusic.play().catch(()=>{});} 
-}
+let val=0;
+let interval=setInterval(()=>{
+val+=5;
+document.getElementById('bar').value=val;
+document.getElementById('percent').innerText=val+'%';
+if(val>=222){clearInterval(interval);
+document.getElementById('born').classList.remove('hidden');
+document.querySelector('#loading button').classList.remove('hidden');}
+},100);
 
-let w=0;
-let load=setInterval(()=>{
-  w+=2;
-  percent.innerText=w+"%";
-  if(w>=100){clearInterval(load);next(2);} 
-},30);
+function showCards(){document.getElementById('loading').classList.add('hidden');document.getElementById('cards').classList.remove('hidden');}
 
-let chosen=false;
-function pick(card){
-  if(chosen) return;
-  chosen=true;
-  card.classList.add("flip");
-  cakeBtn.style.display="inline-block";
-}
+let chosen=0;
+function flip(card,text){card.innerHTML=text;chosen++;if(chosen>=1)document.getElementById('cakeBtn').classList.remove('hidden');}
 
-const decorateBtn=document.getElementById("decorateBtn");
-const cutBtn=document.getElementById("cutBtn");
+function showCake(){document.getElementById('cards').classList.add('hidden');document.getElementById('cake').classList.remove('hidden');document.getElementById('music').play();}
 
-function startSparkles(){
-  for(let i=0;i<25;i++){
-    let s=document.createElement("div");
-    s.className="sparkle";
-    s.innerHTML="✨";
-    s.style.left=Math.random()*100+"vw";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),5000);
-  }
-}
+function decorate(){document.body.insertAdjacentHTML('beforeend','<div id="decorateBg"></div>');document.getElementById('decorateBtn').classList.add('hidden');document.getElementById('cutBtn').classList.remove('hidden');}
 
-function makeBalloons(){
-  for(let i=0;i<10;i++){
-    let b=document.createElement("img");
-    b.src="balloon.png";
-    b.className="balloon";
-    b.style.left=Math.random()*90+"vw";
-    document.body.appendChild(b);
-  }
-}
+function cutCake(){navigator.vibrate(200);alert('Cake cut! 🎂✨');document.getElementById('cake').classList.add('hidden');document.getElementById('balloons').classList.remove('hidden');}
 
-decorateBtn.onclick=()=>{
-  startSparkles();
-  makeBalloons();
-  decorateBtn.style.display="none";
-  cutBtn.style.display="inline-block";
-};
+let words='';
+function pop(baloon,word){baloon.style.display='none';words+=word+' ';document.getElementById('secret').innerText=words;if(words.split(' ').length>4)document.getElementById('finalBtn').classList.remove('hidden');}
 
-const cake=document.getElementById("cake");
-let startX=0;
-cake.addEventListener("pointerdown",e=>startX=e.clientX);
-cake.addEventListener("pointerup",e=>{
-  if(e.clientX-startX>40){
-    if(navigator.vibrate) navigator.vibrate(300);
-    next(5);
-  }
-});
+function showFinal(){document.getElementById('balloons').classList.add('hidden');document.getElementById('final').classList.remove('hidden');}
 </script>
 </body>
 </html>
+
 
