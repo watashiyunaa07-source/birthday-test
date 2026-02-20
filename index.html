@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,16 +7,33 @@
 <style>
 body{margin:0;font-family:cursive;text-align:center;background:#ffe6f2;overflow-x:hidden}
 .hidden{display:none}
-button{padding:12px 25px;font-size:18px;border:none;border-radius:20px;background:#ff66a3;color:white;margin:15px}
-.card{display:inline-block;width:120px;height:170px;background:white;border-radius:15px;margin:15px;font-size:30px;line-height:170px}
-.big{width:160px;height:220px;font-size:50px}
-#decorateBg{position:fixed;top:0;left:0;width:100%;height:100%;background:url('decorate.png');background-size:cover;opacity:0.3;z-index:-1}
+button{padding:12px 25px;font-size:18px;border:none;border-radius:20px;background:#ff4da6;color:white;margin:15px}
+
+/* CUTER STRIPED LOADING BAR */
+progress{width:80%;height:25px;appearance:none}
+progress::-webkit-progress-bar{background:#ffd1e8;border-radius:20px}
+progress::-webkit-progress-value{background:repeating-linear-gradient(45deg,#ff4da6,#ff4da6 10px,#ff99cc 10px,#ff99cc 20px);border-radius:20px}
+
+/* CARD GRID */
+#cardGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:500px;margin:auto}
+.card{perspective:1000px}
+.cardInner{position:relative;width:160px;height:220px;transform-style:preserve-3d;transition:0.8s}
+.card.flip .cardInner{transform:rotateY(180deg)}
+.cardFace{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;background:white}
+.cardBack{transform:rotateY(180deg);background:#ffb3d9;padding:10px;font-size:18px}
+
+/* CAKE SWIPE */
+#cakeBox{position:relative;display:inline-block}
+#cakeOverlay{position:absolute;top:0;left:0;height:100%;width:100%;background:url('cake_plain.png');background-size:cover;border-radius:20px}
+
+#decorateBg{position:fixed;top:0;left:0;width:100%;height:100%;background:url('decorate.png');background-size:cover;opacity:0.35;z-index:-1}
 .balloon{width:120px;margin:15px}
+#scrollBox{position:relative;display:inline-block}
+#finalText{position:absolute;top:15%;left:10%;width:80%;font-size:18px}
 </style>
 </head>
-
 <body>
-<audio id="music" src="sailor.mp3"></audio>
+<audio id="music" src="sailor.mp3" loop></audio>
 
 <!-- LOADING -->
 <div id="loading">
@@ -32,66 +48,67 @@ button{padding:12px 25px;font-size:18px;border:none;border-radius:20px;backgroun
 <!-- CARDS -->
 <div id="cards" class="hidden">
 <h2>Pick your lucky card 🃏</h2>
-<div class="card big" onclick="flip(this,'Spade: Strong & Loyal 🖤')">♠️</div>
-<div class="card big" onclick="flip(this,'Club: Funny & Smart 🌿')">♣️</div>
-<div class="card big" onclick="flip(this,'Heart: Pure Love 💖')">♥️</div>
-<div class="card big" onclick="flip(this,'Diamond: Rare & Precious 💎')">♦️</div>
-<br><button id="cakeBtn" class="hidden" onclick="showCake()">Go to Cake 🎂</button>
+<div id="cardGrid">
+<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♠️</div><div class="cardFace cardBack">Strong & Loyal 🖤</div></div></div>
+<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♣️</div><div class="cardFace cardBack">Funny & Smart 🌿</div></div></div>
+<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♥️</div><div class="cardFace cardBack">Pure Love 💖</div></div></div>
+<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♦️</div><div class="cardFace cardBack">Rare & Precious 💎</div></div></div>
+</div>
+<button id="cakeBtn" class="hidden" onclick="showCake()">Go to Cake 🎂</button>
 </div>
 
 <!-- CAKE -->
 <div id="cake" class="hidden">
-<h2>Make a wish 🕯️</h2>
-<img id="cakeImg" src="cake_plain.png" width="250"><br>
+<h2>Swipe cake to cut 🎂➡️</h2>
+<div id="cakeBox">
+<img src="cake_plain.png" width="260" style="border-radius:20px">
+<div id="cakeOverlay"></div>
+</div><br>
 <button id="decorateBtn" onclick="decorate()">Decorate 🎀</button>
-<button id="cutBtn" class="hidden" onclick="cutCake()">Swipe to cut cake ➡️🎂</button>
 </div>
 
 <!-- BALLOONS -->
 <div id="balloons" class="hidden">
 <h2>Pop balloons 🎈</h2>
-<img class="balloon" src="balloon.png" onclick="pop(this,'You')">
-<img class="balloon" src="balloon.png" onclick="pop(this,'Are')">
-<img class="balloon" src="balloon.png" onclick="pop(this,'My')">
-<img class="balloon" src="balloon.png" onclick="pop(this,'Forever Friend 💖')">
+<img class="balloon" src="balloon.png" onclick="pop(0,this)">
+<img class="balloon" src="balloon.png" onclick="pop(1,this)">
+<img class="balloon" src="balloon.png" onclick="pop(2,this)">
+<img class="balloon" src="balloon.png" onclick="pop(3,this)">
 <p id="secret"></p>
 <button id="finalBtn" class="hidden" onclick="showFinal()">Go to Final Message ➡️</button>
 </div>
 
 <!-- FINAL -->
 <div id="final" class="hidden">
-<img src="scroll.png" width="90%"><br>
-<h3>Your final message goes here 💌✨</h3>
+<div id="scrollBox">
+<img src="scroll.png" width="95%">
+<div id="finalText">Your emotional final message goes here 💌✨</div>
+</div>
 </div>
 
 <script>
-let val=0;
-let interval=setInterval(()=>{
-val+=5;
-document.getElementById('bar').value=val;
-document.getElementById('percent').innerText=val+'%';
-if(val>=222){clearInterval(interval);
-document.getElementById('born').classList.remove('hidden');
-document.querySelector('#loading button').classList.remove('hidden');}
-},100);
+/* LOADING */
+let val=0;let interval=setInterval(()=>{val+=5;bar.value=val;percent.innerText=val+'%';if(val>=222){clearInterval(interval);born.classList.remove('hidden');document.querySelector('#loading button').classList.remove('hidden');}},90);
 
-function showCards(){document.getElementById('loading').classList.add('hidden');document.getElementById('cards').classList.remove('hidden');}
+function showCards(){loading.classList.add('hidden');cards.classList.remove('hidden');music.play();}
 
-let chosen=0;
-function flip(card,text){card.innerHTML=text;chosen++;if(chosen>=1)document.getElementById('cakeBtn').classList.remove('hidden');}
+let flipped=0;function flip(c){if(!c.classList.contains('flip')){c.classList.add('flip');flipped++;if(flipped>=1)cakeBtn.classList.remove('hidden');}}
 
-function showCake(){document.getElementById('cards').classList.add('hidden');document.getElementById('cake').classList.remove('hidden');document.getElementById('music').play();}
+function showCake(){cards.classList.add('hidden');cake.classList.remove('hidden');}
 
-function decorate(){document.body.insertAdjacentHTML('beforeend','<div id="decorateBg"></div>');document.getElementById('decorateBtn').classList.add('hidden');document.getElementById('cutBtn').classList.remove('hidden');}
+function decorate(){document.body.insertAdjacentHTML('beforeend','<div id="decorateBg"></div>');decorateBtn.remove();enableSwipe();}
 
-function cutCake(){navigator.vibrate(200);alert('Cake cut! 🎂✨');document.getElementById('cake').classList.add('hidden');document.getElementById('balloons').classList.remove('hidden');}
+/* SWIPE CUT */
+function enableSwipe(){let startX=0;cakeBox.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+cakeBox.addEventListener('touchmove',e=>{let dx=e.touches[0].clientX-startX;if(dx>80){cakeOverlay.style.width='0%';cutDone();}});
+}
+function cutDone(){navigator.vibrate?.(200);setTimeout(()=>{alert('slay bestie! 💅');cake.classList.add('hidden');balloons.classList.remove('hidden');},400);}
 
-let words='';
-function pop(baloon,word){baloon.style.display='none';words+=word+' ';document.getElementById('secret').innerText=words;if(words.split(' ').length>4)document.getElementById('finalBtn').classList.remove('hidden');}
+/* BALLOONS SAME MESSAGE */
+let words=['You','are','my','forever bestie 💖'];let popped=[false,false,false,false];
+function pop(i,b){b.style.display='none';popped[i]=true;if(popped.every(x=>x)){secret.innerText=words.join(' ');finalBtn.classList.remove('hidden');}}
 
-function showFinal(){document.getElementById('balloons').classList.add('hidden');document.getElementById('final').classList.remove('hidden');}
+function showFinal(){balloons.classList.add('hidden');final.classList.remove('hidden');}
 </script>
 </body>
 </html>
-
-
