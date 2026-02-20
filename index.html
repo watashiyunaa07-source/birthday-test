@@ -4,116 +4,288 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday 💖</title>
-<style>
-body{margin:0;font-family:cursive;text-align:center;background:#ffe6f2}
-.hidden{display:none}
-button{padding:12px 25px;font-size:18px;border:none;border-radius:20px;background:#ff4da6;color:white;margin:15px}
 
-/* STRIPED LOADING BAR */
-#barBox{width:80%;height:25px;margin:auto;background:#ffd1e8;border-radius:20px;overflow:hidden}
-#barFill{height:100%;width:0%;background:repeating-linear-gradient(45deg,#ff4da6,#ff4da6 10px,#ff99cc 10px,#ff99cc 20px)}
+<style>
+body{
+ margin:0;
+ font-family:cursive;
+ text-align:center;
+ background:#ffe6f2;
+ overflow-x:hidden;
+}
+.hidden{display:none}
+
+button{
+ padding:12px 25px;
+ font-size:18px;
+ border:none;
+ border-radius:20px;
+ background:#ff4da6;
+ color:white;
+ margin:15px;
+}
+
+/* LOADING BAR */
+#barBox{
+ width:80%;
+ height:25px;
+ margin:auto;
+ background:#ffd1e8;
+ border-radius:20px;
+ overflow:hidden;
+}
+#barFill{
+ height:100%;
+ width:0%;
+ background:repeating-linear-gradient(
+ 45deg,#ff4da6,#ff4da6 10px,#ff99cc 10px,#ff99cc 20px
+ );
+}
 
 /* CARDS */
-#cardGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:420px;margin:auto}
+#cardGrid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:20px;
+ max-width:420px;
+ margin:auto;
+}
 .card{perspective:1000px}
-.cardInner{position:relative;width:160px;height:220px;transform-style:preserve-3d;transition:0.8s}
+.cardInner{
+ position:relative;
+ width:160px;
+ height:220px;
+ transform-style:preserve-3d;
+ transition:0.8s;
+}
 .card.flip .cardInner{transform:rotateY(180deg)}
-.cardFace{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;background:white}
-.cardBack{transform:rotateY(180deg);background:#ffb3d9;font-size:18px;padding:10px}
+.cardFace{
+ position:absolute;
+ width:100%;
+ height:100%;
+ backface-visibility:hidden;
+ border-radius:20px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:32px;
+ background:white;
+}
+.cardBack{
+ transform:rotateY(180deg);
+ background:#ffb3d9;
+ font-size:18px;
+ padding:10px;
+}
 
-#decorateBg{position:fixed;top:0;left:0;width:100%;height:100%;background:url('decorate.png');background-size:cover;opacity:0.4;z-index:-1}
+#decorateBg{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:url('decorate.png');
+ background-size:cover;
+ opacity:0.4;
+ z-index:-1;
+}
+
 .balloon{width:120px;margin:10px}
+
 #scrollBox{position:relative;display:inline-block}
-#finalText{position:absolute;top:18%;left:10%;width:80%}
+#finalText{
+ position:absolute;
+ top:18%;
+ left:10%;
+ width:80%;
+ font-size:18px;
+}
 </style>
 </head>
+
 <body>
-<audio id="music" src="sailor.mp3" loop></audio>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="sailor.mp3" type="audio/mpeg">
+</audio>
 
 <!-- LOADING -->
 <div id="loading">
-<h2>Measuring your cuteness 🐰💗</h2>
+<h2>Measuring your cuteness ---💗</h2>
 <img src="rabbit.png" width="150"><br>
-<div id="barBox"><div id="barFill"></div></div>
+
+<div id="barBox">
+<div id="barFill"></div>
+</div>
+
 <p id="percent">0%</p>
-<p id="born" class="hidden">A dollkeeper was born 20 years ago 🎂✨</p>
-<button id="next1" class="hidden" onclick="showCards()">Next ➡️</button>
+<p id="born" class="hidden">
+✨A dollkeeper was born 20 years ago ✨
+</p>
+
+<button id="next1" class="hidden" onclick="showCards()">
+Next ➡️
+</button>
 </div>
 
 <!-- CARDS -->
 <div id="cards" class="hidden">
 <h2>Pick your lucky card 🃏</h2>
+
 <div id="cardGrid">
-<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♠️</div><div class="cardFace cardBack">Strong & Loyal 🖤</div></div></div>
-<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♣️</div><div class="cardFace cardBack">Funny & Smart 🌿</div></div></div>
-<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♥️</div><div class="cardFace cardBack">Pure Love 💖</div></div></div>
-<div class="card" onclick="flip(this)"><div class="cardInner"><div class="cardFace">♦️</div><div class="cardFace cardBack">Rare & Precious 💎</div></div></div>
+<div class="card" onclick="flip(this)">
+<div class="cardInner">
+<div class="cardFace">♠️</div>
+<div class="cardFace cardBack">Strong & Loyal 🖤</div>
+</div></div>
+
+<div class="card" onclick="flip(this)">
+<div class="cardInner">
+<div class="cardFace">♣️</div>
+<div class="cardFace cardBack">Funny & Smart 🌿</div>
+</div></div>
+
+<div class="card" onclick="flip(this)">
+<div class="cardInner">
+<div class="cardFace">♥️</div>
+<div class="cardFace cardBack">Pure Love 💖</div>
+</div></div>
+
+<div class="card" onclick="flip(this)">
+<div class="cardInner">
+<div class="cardFace">♦️</div>
+<div class="cardFace cardBack">Rare & Precious 💎</div>
+</div></div>
 </div>
-<button id="cakeBtn" class="hidden" onclick="showCake()">Go to Cake 🎂</button>
+
+<button id="cakeBtn" class="hidden" onclick="showCake()">
+Go to Cake 🎂
+</button>
 </div>
 
 <!-- CAKE -->
 <div id="cake" class="hidden">
 <h2>Swipe cake to cut 🎂➡️</h2>
 <img id="cakeImg" src="cake_plain.png" width="260"><br>
-<button id="decorateBtn" onclick="decorate()">Decorate 🎀</button>
-<button id="cutBtn" class="hidden" onclick="cutCake()">Cut Cake 🎂</button>
+
+<button id="decorateBtn" onclick="decorate()">
+Decorate 🎀
+</button>
+
+<button id="cutBtn" class="hidden" onclick="cutCake()">
+Cut Cake 🎂
+</button>
 </div>
 
 <!-- BALLOONS -->
 <div id="balloons" class="hidden">
 <h2>Pop balloons 🎈</h2>
+
 <img class="balloon" src="balloon.png" onclick="pop(this,'You')">
 <img class="balloon" src="balloon.png" onclick="pop(this,'are')">
 <img class="balloon" src="balloon.png" onclick="pop(this,'my')">
 <img class="balloon" src="balloon.png" onclick="pop(this,'forever bestie 💖')">
+
 <p id="secret"></p>
-<button id="finalBtn" class="hidden" onclick="showFinal()">Go to Final Message ➡️</button>
+
+<button id="finalBtn" class="hidden" onclick="showFinal()">
+Go to Final Message ➡️
+</button>
 </div>
 
 <!-- FINAL -->
 <div id="final" class="hidden">
 <div id="scrollBox">
 <img src="scroll.png" width="95%">
-<div id="finalText">You are the best thing that happened in my life. Happy Birthday my soulmate bestie 💌✨</div>
+<div id="finalText">
+You are the best thing that happened in my life.
+Happy Birthday my soulmate bestie 💌✨
+</div>
 </div>
 </div>
 
 <script>
+
+/* START MUSIC AFTER FIRST TAP */
+const music = document.getElementById("music");
+document.body.addEventListener("click", () => {
+ music.play().catch(()=>{});
+},{once:true});
+
+/* LOADING */
+let val=0;
 const barFill=document.getElementById('barFill');
 const percent=document.getElementById('percent');
-let val=0;
+const born=document.getElementById('born');
+const next1=document.getElementById('next1');
+
 let load=setInterval(()=>{
  val+=3;
  barFill.style.width=(val/222*100)+'%';
  percent.innerText=Math.min(val,222)+'%';
- if(val>=222){clearInterval(load);born.classList.remove('hidden');next1.classList.remove('hidden');}
-},40);
-const music = document.getElementById("music");
 
-function startMusic() {
-  music.play().catch(()=>{});
+ if(val>=222){
+  clearInterval(load);
+  born.classList.remove('hidden');
+  next1.classList.remove('hidden');
+ }
+},40);
+
+/* SCREENS */
+function showCards(){
+ document.getElementById('loading').classList.add('hidden');
+ document.getElementById('cards').classList.remove('hidden');
 }
 
-document.body.addEventListener("click", startMusic, { once:true });
-function showCards(){loading.classList.add('hidden');cards.classList.remove('hidden');music.play().catch(()=>{});} 
-
+/* CARDS */
 let flipped=0;
-function flip(c){if(!c.classList.contains('flip')){c.classList.add('flip');flipped++;if(flipped>=1)cakeBtn.classList.remove('hidden');}}
+function flip(c){
+ if(!c.classList.contains('flip')){
+  c.classList.add('flip');
+  flipped++;
+  if(flipped>=1)
+   document.getElementById('cakeBtn').classList.remove('hidden');
+ }
+}
 
-function showCake(){cards.classList.add('hidden');cake.classList.remove('hidden');}
+/* CAKE */
+function showCake(){
+ document.getElementById('cards').classList.add('hidden');
+ document.getElementById('cake').classList.remove('hidden');
+}
 
-function decorate(){document.body.insertAdjacentHTML('beforeend','<div id="decorateBg"></div>');decorateBtn.style.display='none';cutBtn.classList.remove('hidden');}
+function decorate(){
+ document.body.insertAdjacentHTML(
+ 'beforeend',
+ '<div id="decorateBg"></div>'
+ );
+ document.getElementById('decorateBtn').style.display='none';
+ document.getElementById('cutBtn').classList.remove('hidden');
+}
 
-function cutCake(){navigator.vibrate?.(200);cake.classList.add('hidden');balloons.classList.remove('hidden');}
+function cutCake(){
+ navigator.vibrate?.(200);
+ document.getElementById('cake').classList.add('hidden');
+ document.getElementById('balloons').classList.remove('hidden');
+}
 
+/* BALLOONS */
 let words=[];
-function pop(b,w){b.style.display='none';words.push(w);secret.innerText=words.join(' ');if(words.length>=4)finalBtn.classList.remove('hidden');}
+function pop(b,w){
+ b.style.display='none';
+ words.push(w);
+ document.getElementById('secret').innerText=words.join(' ');
+ if(words.length>=4)
+  document.getElementById('finalBtn').classList.remove('hidden');
+}
 
-function showFinal(){balloons.classList.add('hidden');final.classList.remove('hidden');}
- <audio id="music" loop>
-  <source src="sailor.mp3" type="audio/mpeg">
-</audio>
+/* FINAL */
+function showFinal(){
+ document.getElementById('balloons').classList.add('hidden');
+ document.getElementById('final').classList.remove('hidden');
+}
+
 </script>
 </body>
 </html>
