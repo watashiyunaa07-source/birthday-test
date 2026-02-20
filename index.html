@@ -89,7 +89,13 @@ let load=setInterval(()=>{
  percent.innerText=Math.min(val,222)+'%';
  if(val>=222){clearInterval(load);born.classList.remove('hidden');next1.classList.remove('hidden');}
 },40);
+const music = document.getElementById("music");
 
+function startMusic() {
+  music.play().catch(()=>{});
+}
+
+document.body.addEventListener("click", startMusic, { once:true });
 function showCards(){loading.classList.add('hidden');cards.classList.remove('hidden');music.play().catch(()=>{});} 
 
 let flipped=0;
@@ -105,6 +111,9 @@ let words=[];
 function pop(b,w){b.style.display='none';words.push(w);secret.innerText=words.join(' ');if(words.length>=4)finalBtn.classList.remove('hidden');}
 
 function showFinal(){balloons.classList.add('hidden');final.classList.remove('hidden');}
+ <audio id="music" loop>
+  <source src="sailor.mp3" type="audio/mpeg">
+</audio>
 </script>
 </body>
 </html>
