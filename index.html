@@ -94,11 +94,18 @@ let val=0;let interval=setInterval(()=>{val+=5;bar.value=val;percent.innerText=v
 
 function showCards(){loading.classList.add('hidden');cards.classList.remove('hidden');music.play().catch(()=>{});} 
 let flipped=0;function flip(c){if(!c.classList.contains('flip')){c.classList.add('flip');flipped++;if(flipped>=1)cakeBtn.classList.remove('hidden');}}
-function showCake(){cards.classList.add('hidden');cake.classList.remove('hidden');}
+function showCake(){cards.classList.add('hidden');cake.classList.remove('hidden');setTimeout(enableSwipe,200);}
 function decorate(){document.body.insertAdjacentHTML('beforeend','<div id="decorateBg"></div>');decorateBtn.remove();enableSwipe();}
 
-function enableSwipe(){let startX=0;cakeBox.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
-cakeBox.addEventListener('touchmove',e=>{let dx=e.touches[0].clientX-startX;if(dx>80){cakeOverlay.style.width='0%';cutDone();}});
+function enableSwipe(){
+ let startX=0; let cutting=false;
+ const start=(x)=>{startX=x;};
+ const move=(x)=>{ if(cutting) return; let dx=x-startX; if(dx>60){ cutting=true; cakeOverlay.style.width='0%'; cutDone(); }};
+ cakeBox.addEventListener('touchstart',e=>start(e.touches[0].clientX));
+ cakeBox.addEventListener('touchmove',e=>move(e.touches[0].clientX));
+ cakeBox.addEventListener('mousedown',e=>start(e.clientX));
+ cakeBox.addEventListener('mousemove',e=>{ if(e.buttons) move(e.clientX); });
+}});
 }
 function cutDone(){navigator.vibrate?.(200);popup.style.display='block';}
 function closePopup(){popup.style.display='none';cake.classList.add('hidden');balloons.classList.remove('hidden');window.scrollTo(0,0);} 
@@ -108,5 +115,4 @@ function showFinal(){balloons.classList.add('hidden');final.classList.remove('hi
 </script>
 </body>
 </html>
-
 
